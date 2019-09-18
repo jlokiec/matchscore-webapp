@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
@@ -51,7 +52,7 @@ export default class CategoryBrowser extends React.Component<any, CategoryBrowse
         }
         return (
             <ListGroup variant="flush">
-                {this.state.categories.map(category => <ListGroup.Item key={category.id}>{category.name}</ListGroup.Item>)}
+                {this.state.categories.map(category => <ListGroup.Item key={category.id}><Link to={`/leagues/${category.id}`}>{category.name}</Link></ListGroup.Item>)}
             </ListGroup>
         );
     }
