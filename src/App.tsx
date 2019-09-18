@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import Home from './pages/Home';
 import Categories from './pages/Categories';
+import Leagues from './pages/Leagues';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/categories" component={Categories} />
+          <Route path="/leagues/:id" component={Leagues} />
           <Route component={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>

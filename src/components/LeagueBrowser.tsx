@@ -1,36 +1,43 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { League } from '../models/League';
 import axios from 'axios';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
-import { LeagueCategory } from '../models/LeagueCategory';
 import * as api from '../constants/Api';
 
-interface CategoryBrowserState {
-    loading: boolean,
-    error: boolean,
-    categories: Array<LeagueCategory>
+interface LeagueBrowserProperties {
+    categoryId: number
 }
 
-export default class CategoryBrowser extends React.Component<any, CategoryBrowserState>{
-    constructor(props: any) {
+interface LeagueBrowserState {
+    loading: boolean,
+    error: boolean,
+    leagues: Array<League>
+}
+
+export default class LeagueBrowser extends React.Component<LeagueBrowserProperties, LeagueBrowserState>{
+    constructor(props: LeagueBrowserProperties) {
         super(props);
         this.state = {
             loading: false,
             error: false,
-            categories: []
+            leagues: []
         };
     }
 
     componentDidMount() {
         this.setState({ loading: true });
-        axios.get(api.LEAGUE_CATEGORIES)
-            .then(response => this.setState({ loading: false, categories: response.data }))
+        axios.get(api.LEAGUES, {
+            params: {
+                category: this.props.categoryId
+            }
+        })
+            .then(response => this.setState({ loading: false, leagues: response.data }))
             .catch(error => {
                 this.setState({ loading: false, error: true });
-                console.error(`Error while fetching category data: ${JSON.stringify(error)}`);
-            });
+                console.error(`Error while fetching league data: ${JSON.stringify(error)}`);
+            })
     }
 
     render() {
@@ -52,7 +59,7 @@ export default class CategoryBrowser extends React.Component<any, CategoryBrowse
         }
         return (
             <ListGroup variant="flush">
-                {this.state.categories.map(category => <ListGroup.Item key={category.id}><Link to={`/leagues/${category.id}`}>{category.name}</Link></ListGroup.Item>)}
+                {this.state.leagues.map(league => <ListGroup.Item key={league.id}>{league.name}</ListGroup.Item>)}
             </ListGroup>
         );
     }
