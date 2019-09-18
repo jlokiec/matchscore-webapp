@@ -1,6 +1,10 @@
 import React from 'react';
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import LeagueBrowser from '../components/LeagueBrowser';
-import { RouteComponentProps } from "react-router-dom"
+import { Link, RouteComponentProps } from "react-router-dom"
+import { HOME_NAME } from './Home';
+import { CATEGORIES_NAME } from './Categories';
+import * as routing from '../constants/Routing';
 
 interface LeagueId {
     id: string
@@ -10,9 +14,18 @@ interface LeagueProperties extends RouteComponentProps<LeagueId> {
     categoryName: string
 }
 
-const Leagues: React.FC<LeagueProperties> = (props: LeagueProperties) => {
+export const Leagues: React.FC<LeagueProperties> = (props: LeagueProperties) => {
     const id = parseInt(props.match.params.id);
-    return (<LeagueBrowser categoryId={id} />);
+    return (
+        <div>
+            <Breadcrumb>
+                <Breadcrumb.Item><Link to={routing.HOME}>{HOME_NAME}</Link></Breadcrumb.Item>
+                <Breadcrumb.Item><Link to={routing.CATEGORIES}>{CATEGORIES_NAME}</Link></Breadcrumb.Item>
+                <Breadcrumb.Item active>{LEAGUES_NAME}</Breadcrumb.Item>
+            </Breadcrumb>
+            <LeagueBrowser categoryId={id} />
+        </div>
+    );
 }
 
-export default Leagues;
+export const LEAGUES_NAME = "Ligi";
