@@ -17,15 +17,15 @@ const App: React.FC = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link as={Link} to={routing.HOME}>{HOME_NAME}</Nav.Link>
-              <Nav.Link as={Link} to={routing.CATEGORIES}>{CATEGORIES_NAME}</Nav.Link>
+              <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
+              <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
         <Switch>
-          <Route exact path={routing.HOME} component={Home} />
-          <Route path={routing.CATEGORIES} component={Categories} />
-          <Route path={routing.LEAGUES} component={Leagues} />
+          <Route exact path={routing.HOME_ROUTE} component={Home} />
+          <Route path={routing.CATEGORIES_ROUTE} component={Categories} />
+          <Route path={routing.LEAGUES_ROUTE} component={Leagues} />
           <Route component={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>

@@ -6,6 +6,7 @@ import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import { LeagueCategory } from '../models/LeagueCategory';
 import * as api from '../constants/Api';
+import * as routing from '../constants/Routing';
 
 interface CategoryBrowserState {
     loading: boolean,
@@ -52,7 +53,7 @@ export default class CategoryBrowser extends React.Component<any, CategoryBrowse
         }
         return (
             <ListGroup variant="flush">
-                {this.state.categories.map(category => <ListGroup.Item key={category.id}><Link to={`/leagues/${category.id}`}>{category.name}</Link></ListGroup.Item>)}
+                {this.state.categories.map(category => <ListGroup.Item key={category.id}><Link to={`${routing.LEAGUES_PATH}/${category.id}`}>{category.name}</Link></ListGroup.Item>)}
             </ListGroup>
         );
     }
