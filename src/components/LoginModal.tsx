@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import * as api from '../constants/Api';
 import Modal from 'react-bootstrap/Modal';
-import { LoginDto } from '../models/LoginDto';
+import { CredentialsDto } from '../models/CredentialsDto';
 
 interface LoginModalProps {
     show: boolean,
@@ -50,12 +50,12 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
     }
 
     handleLogin() {
-        const loginDto: LoginDto = {
+        const credentials: CredentialsDto = {
             username: this.state.username,
             password: this.state.password
         };
 
-        axios.post(api.LOGIN, loginDto)
+        axios.post(api.LOGIN, credentials)
             .then(response => this.handleClose())
             .catch(error => {
                 console.error(`Error while logging in: ${JSON.stringify(error)}`);
