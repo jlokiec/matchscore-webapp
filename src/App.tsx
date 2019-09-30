@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -7,11 +8,64 @@ import { Home, HOME_NAME } from './pages/Home';
 import { Categories, CATEGORIES_NAME } from './pages/Categories';
 import { Leagues } from './pages/Leagues';
 import { Register, REGISTER_NAME } from './pages/Register';
+import LoginModal from './components/LoginModal';
 import * as routing from './constants/Routing';
+import { connect } from 'react-redux';
+import { CombinedState } from './reducers/rootReducer';
 
-const App: React.FC = () => {
-  return (
-    <Container>
+interface CustomProps {
+
+}
+
+interface StateProps {
+  username: string,
+  isAdmin: boolean,
+  isUser: boolean,
+  isGuest: boolean
+}
+
+interface DispatchProps {
+
+}
+
+type AppProps = StateProps & CustomProps & DispatchProps;
+
+interface AppState {
+  showLogin: boolean
+}
+
+class App extends React.Component<AppProps, AppState> {
+  constructor(props: AppProps) {
+    super(props);
+    this.state = { showLogin: false };
+    this.handleCloseLogin = this.handleCloseLogin.bind(this);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.displayLoginOrWelcome = this.displayLoginOrWelcome.bind(this);
+  }
+
+  handleLoginClick(event: any) {
+    this.setState({ showLogin: true });
+  }
+
+  handleCloseLogin() {
+    this.setState({ showLogin: false });
+  }
+
+  displayLoginOrWelcome() {
+    if (!this.props.isGuest) {
+      return (<Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>);
+    } else {
+      return (
+        <div className="d-flex justify-content-right">
+          <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
+          <Button onClick={this.handleLoginClick}>Zaloguj się</Button>
+        </div>
+      );
+    }
+  }
+
+  render() {
+    return (<Container>
       <Router>
         <Navbar bg="light" expand="lg">
           <Navbar.Brand as={Link} to="/">MatchScore</Navbar.Brand>
@@ -20,8 +74,8 @@ const App: React.FC = () => {
             <Nav className="mr-auto">
               <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
               <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
-              <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
             </Nav>
+            {this.displayLoginOrWelcome()}
           </Navbar.Collapse>
         </Navbar>
         <Switch>
@@ -32,8 +86,18 @@ const App: React.FC = () => {
           <Route component={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>
-    </Container>
-  );
+      <LoginModal show={this.state.showLogin} handleCancel={this.handleCloseLogin} />
+    </Container>);
+  }
 }
 
-export default App;
+const mapStateToProps = (states: CombinedState, customProps: CustomProps): StateProps => {
+  return {
+    username: states.login.username,
+    isAdmin: states.login.isAdmin,
+    isUser: states.login.isUser,
+    isGuest: states.login.isGuest
+  };
+}
+
+export default connect(mapStateToProps)(App);
