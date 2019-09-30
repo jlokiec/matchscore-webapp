@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -10,20 +10,30 @@ import { Leagues } from './pages/Leagues';
 import { Register, REGISTER_NAME } from './pages/Register';
 import LoginModal from './components/LoginModal';
 import * as routing from './constants/Routing';
+import { connect } from 'react-redux';
 
-const App: React.FC = () => {
-  const [showLogin, setShowLogin] = useState(false);
+interface AppState {
+  showLogin: boolean
+}
 
-  const handleLoginClick = (event: any) => {
-    setShowLogin(true);
+class App extends React.Component<{}, AppState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = { showLogin: false };
+    this.handleCloseLogin = this.handleCloseLogin.bind(this);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
   }
 
-  const handleCloseLogin = () => {
-    setShowLogin(false);
+  handleLoginClick(event: any) {
+    this.setState({ showLogin: true });
   }
 
-  return (
-    <Container>
+  handleCloseLogin() {
+    this.setState({ showLogin: false });
+  }
+
+  render() {
+    return (<Container>
       <Router>
         <Navbar bg="light" expand="lg">
           <Navbar.Brand as={Link} to="/">MatchScore</Navbar.Brand>
@@ -35,7 +45,7 @@ const App: React.FC = () => {
               <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
             </Nav>
             <div className="d-flex justify-content-right">
-              <Button onClick={handleLoginClick}>Zaloguj</Button>
+              <Button onClick={this.handleLoginClick}>Zaloguj</Button>
             </div>
           </Navbar.Collapse>
         </Navbar>
@@ -47,9 +57,9 @@ const App: React.FC = () => {
           <Route component={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>
-      <LoginModal show={showLogin} handleCancel={handleCloseLogin} />
-    </Container>
-  );
+      <LoginModal show={this.state.showLogin} handleCancel={this.handleCloseLogin} />
+    </Container>);
+  }
 }
 
-export default App;
+export default connect()(App);
