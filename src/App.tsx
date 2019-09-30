@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Home, HOME_NAME } from './pages/Home';
 import { Categories, CATEGORIES_NAME } from './pages/Categories';
 import { Leagues } from './pages/Leagues';
+import { Register, REGISTER_NAME } from './pages/Register';
 import * as routing from './constants/Routing';
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
             <Nav className="mr-auto">
               <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
               <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
+              <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -26,6 +28,7 @@ const App: React.FC = () => {
           <Route exact path={routing.HOME_ROUTE} component={Home} />
           <Route path={routing.CATEGORIES_ROUTE} component={Categories} />
           <Route path={routing.LEAGUES_ROUTE} component={Leagues} />
+          <Route path={routing.REGISTER_ROUTE} component={Register} />
           <Route component={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>
