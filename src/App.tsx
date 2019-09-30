@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -7,9 +8,20 @@ import { Home, HOME_NAME } from './pages/Home';
 import { Categories, CATEGORIES_NAME } from './pages/Categories';
 import { Leagues } from './pages/Leagues';
 import { Register, REGISTER_NAME } from './pages/Register';
+import LoginModal from './components/LoginModal';
 import * as routing from './constants/Routing';
 
 const App: React.FC = () => {
+  const [showLogin, setShowLogin] = useState(false);
+
+  const handleLoginClick = (event: any) => {
+    setShowLogin(true);
+  }
+
+  const handleCloseLogin = () => {
+    setShowLogin(false);
+  }
+
   return (
     <Container>
       <Router>
@@ -22,6 +34,9 @@ const App: React.FC = () => {
               <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
               <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
             </Nav>
+            <div className="d-flex justify-content-right">
+              <Button onClick={handleLoginClick}>Zaloguj</Button>
+            </div>
           </Navbar.Collapse>
         </Navbar>
         <Switch>
@@ -32,6 +47,7 @@ const App: React.FC = () => {
           <Route component={() => <h1>Page not found</h1>} />
         </Switch>
       </Router>
+      <LoginModal show={showLogin} handleCancel={handleCloseLogin} />
     </Container>
   );
 }
