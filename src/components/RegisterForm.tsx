@@ -102,7 +102,9 @@ export default class RegisterForm extends React.Component<any, RegisterFormState
     handleEmailChange(event: any) {
         const email: string = event.target.value;
 
-        if (email.length >= 5 && email.length <= 32) {
+        const emailMatchesRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        if (email.length >= 5 && email.length <= 32 && emailMatchesRegex) {
             this.setState({ email: email, emailValid: true });
         } else {
             this.setState({ email: email, emailValid: false });
@@ -112,7 +114,7 @@ export default class RegisterForm extends React.Component<any, RegisterFormState
     emailFeedback() {
         return (
             <Form.Control.Feedback type={this.state.emailValid ? "valid" : "invalid"}>
-                {this.state.emailValid ? "OK" : "E-mail powinien mieć od 5 do 32 znaków"}
+                {this.state.emailValid ? "OK" : "E-mail powinien mieć od 5 do 32 znaków i spełniać format example@domain.com"}
             </Form.Control.Feedback>
         );
     }
