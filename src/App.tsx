@@ -11,17 +11,36 @@ import { Register, REGISTER_NAME } from './pages/Register';
 import LoginModal from './components/LoginModal';
 import * as routing from './constants/Routing';
 import { connect } from 'react-redux';
+import { CombinedState } from './reducers/rootReducer';
+
+interface CustomProps {
+
+}
+
+interface StateProps {
+  username: string,
+  isAdmin: boolean,
+  isUser: boolean,
+  isGuest: boolean
+}
+
+interface DispatchProps {
+
+}
+
+type AppProps = StateProps & CustomProps & DispatchProps;
 
 interface AppState {
   showLogin: boolean
 }
 
-class App extends React.Component<{}, AppState> {
-  constructor(props: {}) {
+class App extends React.Component<AppProps, AppState> {
+  constructor(props: AppProps) {
     super(props);
     this.state = { showLogin: false };
     this.handleCloseLogin = this.handleCloseLogin.bind(this);
     this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.displayLoginOrWelcome = this.displayLoginOrWelcome.bind(this);
   }
 
   handleLoginClick(event: any) {
@@ -30,6 +49,19 @@ class App extends React.Component<{}, AppState> {
 
   handleCloseLogin() {
     this.setState({ showLogin: false });
+  }
+
+  displayLoginOrWelcome() {
+    if (!this.props.isGuest) {
+      return (<Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>);
+    } else {
+      return (
+        <div className="d-flex justify-content-right">
+          <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
+          <Button onClick={this.handleLoginClick}>Zaloguj się</Button>
+        </div>
+      );
+    }
   }
 
   render() {
@@ -42,11 +74,8 @@ class App extends React.Component<{}, AppState> {
             <Nav className="mr-auto">
               <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
               <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
-              <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
             </Nav>
-            <div className="d-flex justify-content-right">
-              <Button onClick={this.handleLoginClick}>Zaloguj</Button>
-            </div>
+            {this.displayLoginOrWelcome()}
           </Navbar.Collapse>
         </Navbar>
         <Switch>
@@ -62,4 +91,13 @@ class App extends React.Component<{}, AppState> {
   }
 }
 
-export default connect()(App);
+const mapStateToProps = (states: CombinedState, customProps: CustomProps): StateProps => {
+  return {
+    username: states.login.username,
+    isAdmin: states.login.isAdmin,
+    isUser: states.login.isUser,
+    isGuest: states.login.isGuest
+  };
+}
+
+export default connect(mapStateToProps)(App);
