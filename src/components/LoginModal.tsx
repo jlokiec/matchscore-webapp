@@ -1,34 +1,47 @@
 import React from 'react';
-import axios from 'axios';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import * as api from '../constants/Api';
 import Modal from 'react-bootstrap/Modal';
 import { CredentialsDto } from '../models/CredentialsDto';
+import { CombinedState } from '../reducers/rootReducer';
+import { connect } from 'react-redux';
+import { login, clear } from '../actions/login';
+import { ThunkDispatch } from 'redux-thunk'
 
-interface LoginModalProps {
+interface CustomProps {
     show: boolean,
     handleCancel: Function
 }
+
+interface StateProps {
+    loading: boolean,
+    error?: object,
+    success: boolean
+}
+
+interface DispatchProps {
+    login: (credentials: CredentialsDto) => void,
+    clear: () => void
+}
+
+type LoginModalProps = StateProps & CustomProps & DispatchProps;
 
 interface LoginModalState {
     show: boolean,
     username: string,
     password: string,
-    error: boolean
 }
 
-export default class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
+class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
     constructor(props: LoginModalProps) {
         super(props);
         this.state = {
             show: this.props.show,
             username: "",
-            password: "",
-            error: false
+            password: ""
         };
 
         this.handleClose = this.handleClose.bind(this);
@@ -45,7 +58,8 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
     }
 
     handleClose() {
-        this.setState({ show: false, username: "", password: "", error: false });
+        this.setState({ show: false, username: "", password: "" });
+        this.props.clear();
         this.props.handleCancel();
     }
 
@@ -55,12 +69,7 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
             password: this.state.password
         };
 
-        axios.post(api.LOGIN, credentials)
-            .then(response => this.handleClose())
-            .catch(error => {
-                console.error(`Error while logging in: ${JSON.stringify(error)}`);
-                this.setState({ error: true });
-            });
+        this.props.login(credentials);
     }
 
     enableLogin() {
@@ -81,8 +90,10 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
     }
 
     loginFeedback() {
-        if (this.state.error) {
+        if (this.props.error) {
             return (<Alert variant="danger">Błąd podczas logowania.</Alert>);
+        } else if (this.props.success) {
+            return (<Alert variant="success">Zostałeś poprawnie zalogowany!</Alert>);
         }
     }
 
@@ -131,3 +142,22 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
         );
     }
 }
+
+const mapStateToProps = (states: CombinedState, customProps: CustomProps): StateProps => {
+    return {
+        loading: states.login.loading,
+        error: states.login.error,
+        success: states.login.success
+    };
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
+    return {
+        login: async (credentials: CredentialsDto) => {
+            await dispatch(login(credentials));
+        },
+        clear: () => dispatch(clear())
+    };
+}
+
+export default connect<StateProps, DispatchProps, CustomProps, CombinedState>(mapStateToProps, mapDispatchToProps)(LoginModal);
