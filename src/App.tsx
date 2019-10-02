@@ -12,6 +12,8 @@ import LoginModal from './components/LoginModal';
 import * as routing from './constants/Routing';
 import { connect } from 'react-redux';
 import { CombinedState } from './reducers/rootReducer';
+import { ThunkDispatch } from 'redux-thunk';
+import { logout } from './actions/user';
 
 interface CustomProps {
 
@@ -21,11 +23,11 @@ interface StateProps {
   username?: string,
   isAdmin: boolean,
   isUser: boolean,
-  isGuest: boolean
+  isLoggedIn: boolean
 }
 
 interface DispatchProps {
-
+  logout: () => void
 }
 
 type AppProps = StateProps & CustomProps & DispatchProps;
@@ -40,6 +42,7 @@ class App extends React.Component<AppProps, AppState> {
     this.state = { showLogin: false };
     this.handleCloseLogin = this.handleCloseLogin.bind(this);
     this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.displayLoginOrWelcome = this.displayLoginOrWelcome.bind(this);
   }
 
@@ -51,9 +54,20 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({ showLogin: false });
   }
 
+  handleLogout(event: any) {
+    this.props.logout();
+  }
+
   displayLoginOrWelcome() {
-    if (!this.props.isGuest) {
-      return (<Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>);
+    if (this.props.isLoggedIn) {
+      return (
+        <div className="d-flex justify-content-right">
+          <Nav.Item>
+            <Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>
+          </Nav.Item>
+          <Button onClick={this.handleLogout}>Wyloguj się</Button>
+        </div>
+      );
     } else {
       return (
         <div className="d-flex justify-content-right">
@@ -96,8 +110,16 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
     username: states.user.username,
     isAdmin: states.user.isAdmin,
     isUser: states.user.isUser,
-    isGuest: states.user.isLoggedIn
+    isLoggedIn: states.user.isLoggedIn
   };
 }
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
+  return {
+    logout: async () => {
+      await dispatch(logout());
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
