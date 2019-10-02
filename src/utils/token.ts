@@ -11,6 +11,10 @@ export const load = (): string | null => {
     return localStorage.getItem(TOKEN_KEY);
 }
 
+export const removeToken = () => {
+    localStorage.removeItem(TOKEN_KEY);
+}
+
 export const getTokenFromResponse = (response: AxiosResponse): string | null => {
     if (response.headers.authorization) {
         const token: string = response.headers.authorization;
