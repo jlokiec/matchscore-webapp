@@ -3,6 +3,7 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGIN_CLEAR,
+    LOGOUT,
     UserAction,
     LoginSuccessAction,
     LoginErrorAction
@@ -66,6 +67,8 @@ export const user = (state: UserState = initialState, action: UserAction): UserS
                 error: undefined,
                 success: false
             };
+        case LOGOUT:
+            return initialState;
         default:
             return state;
     }
