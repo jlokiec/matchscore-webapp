@@ -79,29 +79,31 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
-    return (<Container>
-      <Router>
-        <Navbar bg="light" expand="lg">
-          <Navbar.Brand as={Link} to="/">MatchScore</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
-              <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
-            </Nav>
-            {this.displayLoginOrWelcome()}
-          </Navbar.Collapse>
-        </Navbar>
-        <Switch>
-          <Route exact path={routing.HOME_ROUTE} component={Home} />
-          <Route path={routing.CATEGORIES_ROUTE} component={Categories} />
-          <Route path={routing.LEAGUES_ROUTE} component={Leagues} />
-          <Route path={routing.REGISTER_ROUTE} component={Register} />
-          <Route component={() => <h1>Page not found</h1>} />
-        </Switch>
-      </Router>
-      <LoginModal show={this.state.showLogin} handleCancel={this.handleCloseLogin} />
-    </Container>);
+    return (
+      <Container>
+        <Router>
+          <Navbar bg="light" expand="lg">
+            <Navbar.Brand as={Link} to="/">MatchScore</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="mr-auto">
+                <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
+                <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
+              </Nav>
+              {this.displayLoginOrWelcome()}
+            </Navbar.Collapse>
+          </Navbar>
+          <Switch>
+            <Route exact path={routing.HOME_ROUTE} component={Home} />
+            <Route path={routing.CATEGORIES_ROUTE} component={Categories} />
+            <Route path={routing.LEAGUES_ROUTE} component={Leagues} />
+            <Route path={routing.REGISTER_ROUTE} component={Register} />
+            <Route component={() => <h1>Page not found</h1>} />
+          </Switch>
+        </Router>
+        <LoginModal show={this.state.showLogin} handleCancel={this.handleCloseLogin} />
+      </Container>
+    );
   }
 }
 
