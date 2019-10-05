@@ -1,7 +1,7 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
-import axios from 'axios';
 import * as api from '../constants/Api';
 import { League } from '../models/League';
+import { myAxios } from '../utils/axios';
 
 export const FETCH_LEAGUES_START = 'FETCH_LEAGUES_START';
 export const FETCH_LEAGUES_SUCCESS = 'FETCH_LEAGUES_SUCCESS';
@@ -46,7 +46,7 @@ export const fetchLeaguesSuccess = (leagues: Array<League>): FetchLeaguesSuccess
 export const fetch = (categoryId: number): ThunkAction<Promise<void>, {}, {}, LeaguesAction> => {
     return async (dispatch: ThunkDispatch<{}, {}, LeaguesAction>): Promise<void> => {
         dispatch(fetchLeaguesStart());
-        axios.get(api.LEAGUES, {
+        myAxios().get(api.LEAGUES, {
             params: {
                 category: categoryId
             }
