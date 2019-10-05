@@ -3,30 +3,63 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGIN_CLEAR,
+    LOGOUT,
     UserAction,
     LoginSuccessAction,
     LoginErrorAction
 } from '../actions/user';
+import {
+    getToken,
+    getUsername,
+    decodeJwt,
+    isTokenValid,
+    getIsAdmin,
+    getIsUser
+} from '../utils/token';
 
 export interface UserState {
     loading: boolean,
     error?: object,
     success: boolean,
-    username: string,
+    username?: string,
     isAdmin: boolean,
     isUser: boolean,
-    isGuest: boolean
+    isLoggedIn: boolean
 }
 
-const initialState = {
+const defaultState: UserState = {
     loading: false,
     error: undefined,
     success: false,
-    username: "Gość",
+    username: undefined,
     isAdmin: false,
     isUser: false,
-    isGuest: true
+    isLoggedIn: false
+};
+
+const getInitialState = (): UserState => {
+    const token = getToken();
+
+    if (token) {
+        const decodedToken = decodeJwt(token);
+
+        if (isTokenValid(decodedToken)) {
+            return {
+                loading: false,
+                error: undefined,
+                success: false,
+                username: getUsername(decodedToken),
+                isAdmin: getIsAdmin(decodedToken),
+                isUser: getIsUser(decodedToken),
+                isLoggedIn: true
+            };
+        }
+    }
+
+    return defaultState;
 }
+
+const initialState: UserState = getInitialState();
 
 export const user = (state: UserState = initialState, action: UserAction): UserState => {
     switch (action.type) {
@@ -46,7 +79,7 @@ export const user = (state: UserState = initialState, action: UserAction): UserS
                 username: (action as LoginSuccessAction).user.username,
                 isAdmin: (action as LoginSuccessAction).user.roles.includes('ROLE_ADMIN'),
                 isUser: (action as LoginSuccessAction).user.roles.includes('ROLE_USER'),
-                isGuest: false
+                isLoggedIn: true
             };
         case LOGIN_ERROR:
             return {
@@ -54,10 +87,10 @@ export const user = (state: UserState = initialState, action: UserAction): UserS
                 loading: false,
                 error: (action as LoginErrorAction).error,
                 success: false,
-                username: "Gość",
+                username: undefined,
                 isAdmin: false,
                 isUser: false,
-                isGuest: true
+                isLoggedIn: false
             };
         case LOGIN_CLEAR:
             return {
@@ -66,6 +99,8 @@ export const user = (state: UserState = initialState, action: UserAction): UserS
                 error: undefined,
                 success: false
             };
+        case LOGOUT:
+            return defaultState;
         default:
             return state;
     }

@@ -12,20 +12,22 @@ import LoginModal from './components/LoginModal';
 import * as routing from './constants/Routing';
 import { connect } from 'react-redux';
 import { CombinedState } from './reducers/rootReducer';
+import { ThunkDispatch } from 'redux-thunk';
+import { logout } from './actions/user';
 
 interface CustomProps {
 
 }
 
 interface StateProps {
-  username: string,
+  username?: string,
   isAdmin: boolean,
   isUser: boolean,
-  isGuest: boolean
+  isLoggedIn: boolean
 }
 
 interface DispatchProps {
-
+  logout: () => void
 }
 
 type AppProps = StateProps & CustomProps & DispatchProps;
@@ -40,6 +42,7 @@ class App extends React.Component<AppProps, AppState> {
     this.state = { showLogin: false };
     this.handleCloseLogin = this.handleCloseLogin.bind(this);
     this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.displayLoginOrWelcome = this.displayLoginOrWelcome.bind(this);
   }
 
@@ -51,9 +54,20 @@ class App extends React.Component<AppProps, AppState> {
     this.setState({ showLogin: false });
   }
 
+  handleLogout(event: any) {
+    this.props.logout();
+  }
+
   displayLoginOrWelcome() {
-    if (!this.props.isGuest) {
-      return (<Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>);
+    if (this.props.isLoggedIn) {
+      return (
+        <div className="d-flex justify-content-right">
+          <Nav.Item>
+            <Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>
+          </Nav.Item>
+          <Button onClick={this.handleLogout}>Wyloguj się</Button>
+        </div>
+      );
     } else {
       return (
         <div className="d-flex justify-content-right">
@@ -65,29 +79,31 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
-    return (<Container>
-      <Router>
-        <Navbar bg="light" expand="lg">
-          <Navbar.Brand as={Link} to="/">MatchScore</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
-              <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
-            </Nav>
-            {this.displayLoginOrWelcome()}
-          </Navbar.Collapse>
-        </Navbar>
-        <Switch>
-          <Route exact path={routing.HOME_ROUTE} component={Home} />
-          <Route path={routing.CATEGORIES_ROUTE} component={Categories} />
-          <Route path={routing.LEAGUES_ROUTE} component={Leagues} />
-          <Route path={routing.REGISTER_ROUTE} component={Register} />
-          <Route component={() => <h1>Page not found</h1>} />
-        </Switch>
-      </Router>
-      <LoginModal show={this.state.showLogin} handleCancel={this.handleCloseLogin} />
-    </Container>);
+    return (
+      <Container>
+        <Router>
+          <Navbar bg="light" expand="lg">
+            <Navbar.Brand as={Link} to="/">MatchScore</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="mr-auto">
+                <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
+                <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
+              </Nav>
+              {this.displayLoginOrWelcome()}
+            </Navbar.Collapse>
+          </Navbar>
+          <Switch>
+            <Route exact path={routing.HOME_ROUTE} component={Home} />
+            <Route path={routing.CATEGORIES_ROUTE} component={Categories} />
+            <Route path={routing.LEAGUES_ROUTE} component={Leagues} />
+            <Route path={routing.REGISTER_ROUTE} component={Register} />
+            <Route component={() => <h1>Page not found</h1>} />
+          </Switch>
+        </Router>
+        <LoginModal show={this.state.showLogin} handleCancel={this.handleCloseLogin} />
+      </Container>
+    );
   }
 }
 
@@ -96,8 +112,16 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
     username: states.user.username,
     isAdmin: states.user.isAdmin,
     isUser: states.user.isUser,
-    isGuest: states.user.isGuest
+    isLoggedIn: states.user.isLoggedIn
   };
 }
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
+  return {
+    logout: async () => {
+      await dispatch(logout());
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
