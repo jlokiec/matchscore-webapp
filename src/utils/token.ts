@@ -1,7 +1,16 @@
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
+import jwt_decode from 'jwt-decode';
 
 const TOKEN_KEY = 'JWT';
 const TOKEN_PREFIX = 'Bearer ';
+
+export interface Jwt {
+    iss: string,
+    aud: string,
+    sub: string,
+    exp: number,
+    roles: Array<string>
+}
 
 export const saveToken = (token: string): void => {
     localStorage.setItem(TOKEN_KEY, token);
@@ -45,4 +54,24 @@ export const processRequest = (request: AxiosRequestConfig) => {
     }
 
     return request;
+}
+
+export const decodeJwt = (token: string) => {
+    return (jwt_decode(token) as Jwt);
+}
+
+export const getUsername = (decodedToken: Jwt) => {
+    return decodedToken.sub;
+}
+
+export const getIsAdmin = (decodedToken: Jwt) => {
+    return decodedToken.roles.includes('ROLE_ADMIN');
+}
+
+export const getIsUser = (decodedToken: Jwt) => {
+    return decodedToken.roles.includes('ROLE_USER');
+}
+
+export const isTokenValid = (decodedToken: Jwt) => {
+    return new Date().getUTCMilliseconds() < decodedToken.exp;
 }

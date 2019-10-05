@@ -8,6 +8,14 @@ import {
     LoginSuccessAction,
     LoginErrorAction
 } from '../actions/user';
+import {
+    getToken,
+    getUsername,
+    decodeJwt,
+    isTokenValid,
+    getIsAdmin,
+    getIsUser
+} from '../utils/token';
 
 export interface UserState {
     loading: boolean,
@@ -19,7 +27,7 @@ export interface UserState {
     isLoggedIn: boolean
 }
 
-const initialState: UserState = {
+const defaultState: UserState = {
     loading: false,
     error: undefined,
     success: false,
@@ -27,7 +35,31 @@ const initialState: UserState = {
     isAdmin: false,
     isUser: false,
     isLoggedIn: false
+};
+
+const getInitialState = (): UserState => {
+    const token = getToken();
+
+    if (token) {
+        const decodedToken = decodeJwt(token);
+
+        if (isTokenValid(decodedToken)) {
+            return {
+                loading: false,
+                error: undefined,
+                success: false,
+                username: getUsername(decodedToken),
+                isAdmin: getIsAdmin(decodedToken),
+                isUser: getIsUser(decodedToken),
+                isLoggedIn: true
+            };
+        }
+    }
+
+    return defaultState;
 }
+
+const initialState: UserState = getInitialState();
 
 export const user = (state: UserState = initialState, action: UserAction): UserState => {
     switch (action.type) {
@@ -68,7 +100,7 @@ export const user = (state: UserState = initialState, action: UserAction): UserS
                 success: false
             };
         case LOGOUT:
-            return initialState;
+            return defaultState;
         default:
             return state;
     }
