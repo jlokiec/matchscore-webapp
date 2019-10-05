@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import { CredentialsDto } from '../models/CredentialsDto';
 import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
-import { login, clear } from '../actions/login';
+import { login, clear } from '../actions/user';
 import { ThunkDispatch } from 'redux-thunk'
 
 interface CustomProps {
@@ -145,9 +145,9 @@ class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
 
 const mapStateToProps = (states: CombinedState, customProps: CustomProps): StateProps => {
     return {
-        loading: states.login.loading,
-        error: states.login.error,
-        success: states.login.success
+        loading: states.user.loading,
+        error: states.user.error,
+        success: states.user.success
     };
 }
 

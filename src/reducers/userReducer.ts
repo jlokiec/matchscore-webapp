@@ -3,12 +3,12 @@ import {
     LOGIN_SUCCESS,
     LOGIN_ERROR,
     LOGIN_CLEAR,
-    LoginAction,
+    UserAction,
     LoginSuccessAction,
     LoginErrorAction
-} from '../actions/login';
+} from '../actions/user';
 
-export interface LoginState {
+export interface UserState {
     loading: boolean,
     error?: object,
     success: boolean,
@@ -28,7 +28,7 @@ const initialState = {
     isGuest: true
 }
 
-export const login = (state: LoginState = initialState, action: LoginAction): LoginState => {
+export const user = (state: UserState = initialState, action: UserAction): UserState => {
     switch (action.type) {
         case LOGIN_START:
             return {
