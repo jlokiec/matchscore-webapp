@@ -18,7 +18,7 @@ interface CustomProps {
 }
 
 interface StateProps {
-  username: string,
+  username?: string,
   isAdmin: boolean,
   isUser: boolean,
   isGuest: boolean
@@ -96,7 +96,7 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
     username: states.user.username,
     isAdmin: states.user.isAdmin,
     isUser: states.user.isUser,
-    isGuest: states.user.isGuest
+    isGuest: states.user.isLoggedIn
   };
 }
 
