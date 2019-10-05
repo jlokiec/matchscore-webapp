@@ -1,8 +1,8 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
-import axios from 'axios';
 import { UserLoginDto } from '../models/UserLoginDto';
 import * as api from '../constants/Api';
 import { CredentialsDto } from '../models/CredentialsDto';
+import { myAxios } from '../utils/axios';
 
 export const LOGIN_START = 'LOGIN_START';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -27,7 +27,7 @@ export interface LoginClearAction {
     type: string
 }
 
-export type LoginAction = LoginStartAction | LoginSuccessAction | LoginErrorAction | LoginClearAction;
+export type UserAction = LoginStartAction | LoginSuccessAction | LoginErrorAction | LoginClearAction;
 
 export const loginStart = (): LoginStartAction => {
     return {
@@ -49,10 +49,16 @@ export const loginSuccess = (dto: UserLoginDto): LoginSuccessAction => {
     };
 }
 
-export const login = (credentials: CredentialsDto): ThunkAction<Promise<void>, {}, {}, LoginAction> => {
-    return async (dispatch: ThunkDispatch<{}, {}, LoginAction>): Promise<void> => {
+export const clear = () => {
+    return {
+        type: LOGIN_CLEAR
+    };
+}
+
+export const login = (credentials: CredentialsDto): ThunkAction<Promise<void>, {}, {}, UserAction> => {
+    return async (dispatch: ThunkDispatch<{}, {}, UserAction>): Promise<void> => {
         dispatch(loginStart());
-        axios.post(api.LOGIN, credentials)
+        myAxios().post(api.LOGIN, credentials)
             .then(response => {
                 dispatch(loginSuccess(response.data));
                 Promise.resolve();
@@ -61,11 +67,5 @@ export const login = (credentials: CredentialsDto): ThunkAction<Promise<void>, {
                 dispatch(loginError(error));
                 Promise.reject();
             });
-    };
-}
-
-export const clear = () => {
-    return {
-        type: LOGIN_CLEAR
     };
 }

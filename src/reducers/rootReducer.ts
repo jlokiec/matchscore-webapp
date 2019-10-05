@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
-import { login, LoginState } from './loginReducer';
+import { user, UserState } from './userReducer';
 import { leagues, LeaguesState } from './leaguesReducer';
 import { categories, CategoriesState } from './categoriesReducer';
 
 export interface CombinedState {
-    login: LoginState,
+    user: UserState,
     leagues: LeaguesState,
     categories: CategoriesState
 }
 
-export const rootReducer = combineReducers<CombinedState>({ login, leagues, categories });
+export const rootReducer = combineReducers<CombinedState>({ user, leagues, categories });

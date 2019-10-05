@@ -93,10 +93,10 @@ class App extends React.Component<AppProps, AppState> {
 
 const mapStateToProps = (states: CombinedState, customProps: CustomProps): StateProps => {
   return {
-    username: states.login.username,
-    isAdmin: states.login.isAdmin,
-    isUser: states.login.isUser,
-    isGuest: states.login.isGuest
+    username: states.user.username,
+    isAdmin: states.user.isAdmin,
+    isUser: states.user.isUser,
+    isGuest: states.user.isGuest
   };
 }
 
