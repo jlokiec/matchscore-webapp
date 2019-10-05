@@ -3,11 +3,11 @@ import { AxiosResponse, AxiosRequestConfig } from 'axios';
 const TOKEN_KEY = 'JWT';
 const TOKEN_PREFIX = 'Bearer ';
 
-export const save = (token: string): void => {
+export const saveToken = (token: string): void => {
     localStorage.setItem(TOKEN_KEY, token);
 }
 
-export const load = (): string | null => {
+export const getToken = (): string | null => {
     return localStorage.getItem(TOKEN_KEY);
 }
 
@@ -28,19 +28,19 @@ export const processResponse = (response: AxiosResponse) => {
     const token = getTokenFromResponse(response)
 
     if (token) {
-        save(token);
+        saveToken(token);
     }
 
     return response;
 }
 
 export const processRequest = (request: AxiosRequestConfig) => {
-    const token = load();
+    const token = getToken();
 
     if (token) {
         request.headers = {
             ...request.headers,
-            authorization: load()
+            authorization: getToken()
         };
     }
 
