@@ -1,6 +1,6 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 import { UserLoginDto } from '../models/UserLoginDto';
-import * as api from '../constants/Api';
+import * as api from '../constants/api';
 import { CredentialsDto } from '../models/CredentialsDto';
 import { myAxios } from '../utils/axios';
 import { removeToken } from '../utils/token';
