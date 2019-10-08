@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import { myAxios } from '../utils/axios';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -72,7 +72,7 @@ export default class RegisterForm extends React.Component<any, RegisterFormState
                 lastName: this.state.lastName
             };
 
-            axios.post(api.REGISTER, registerDto)
+            myAxios().post(api.REGISTER, registerDto)
                 .then(response => this.setState({ success: true, error: false }))
                 .catch(error => {
                     console.error(`Error while registering new user: ${JSON.stringify(error)}`);
