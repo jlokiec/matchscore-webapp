@@ -8,7 +8,7 @@ import { Home, HOME_NAME } from './pages/Home';
 import { Categories, CATEGORIES_NAME } from './pages/Categories';
 import { Leagues } from './pages/Leagues';
 import { Register, REGISTER_NAME } from './pages/Register';
-import LoginModal from './components/LoginModal';
+import { Login } from './pages/Login';
 import * as routing from './constants/Routing';
 import { connect } from 'react-redux';
 import { CombinedState } from './reducers/rootReducer';
@@ -32,26 +32,11 @@ interface DispatchProps {
 
 type AppProps = StateProps & CustomProps & DispatchProps;
 
-interface AppState {
-  showLogin: boolean
-}
-
-class App extends React.Component<AppProps, AppState> {
+class App extends React.Component<AppProps, {}> {
   constructor(props: AppProps) {
     super(props);
-    this.state = { showLogin: false };
-    this.handleCloseLogin = this.handleCloseLogin.bind(this);
-    this.handleLoginClick = this.handleLoginClick.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.displayLoginOrWelcome = this.displayLoginOrWelcome.bind(this);
-  }
-
-  handleLoginClick(event: any) {
-    this.setState({ showLogin: true });
-  }
-
-  handleCloseLogin() {
-    this.setState({ showLogin: false });
   }
 
   handleLogout(event: any) {
@@ -72,7 +57,7 @@ class App extends React.Component<AppProps, AppState> {
       return (
         <div className="d-flex justify-content-right">
           <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
-          <Button onClick={this.handleLoginClick}>Zaloguj się</Button>
+          <Button href={routing.LOGIN_ROUTE}>Zaloguj się</Button>
         </div>
       );
     }
@@ -98,10 +83,10 @@ class App extends React.Component<AppProps, AppState> {
             <Route path={routing.CATEGORIES_ROUTE} component={Categories} />
             <Route path={routing.LEAGUES_ROUTE} component={Leagues} />
             <Route path={routing.REGISTER_ROUTE} component={Register} />
+            <Route path={routing.LOGIN_ROUTE} component={Login} />
             <Route component={() => <h1>Page not found</h1>} />
           </Switch>
         </Router>
-        <LoginModal show={this.state.showLogin} handleCancel={this.handleCloseLogin} />
       </Container>
     );
   }
