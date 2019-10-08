@@ -1,7 +1,7 @@
 import React from 'react';
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import RegisterForm from '../components/RegisterForm';
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 import { HOME_NAME } from './Home';
 import * as routing from '../constants/routing';
 

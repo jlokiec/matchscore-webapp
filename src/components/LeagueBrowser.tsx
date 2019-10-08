@@ -7,7 +7,7 @@ import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
 import { fetch } from '../actions/leagues';
 import { getLeaguesForCategoryId } from '../reducers/leaguesReducer';
-import { ThunkDispatch } from 'redux-thunk'
+import { ThunkDispatch } from 'redux-thunk';
 
 interface CustomProps {
     categoryId: number

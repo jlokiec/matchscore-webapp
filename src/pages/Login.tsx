@@ -1,5 +1,5 @@
 import React from 'react';
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { HOME_NAME } from './Home';
 import * as routing from '../constants/routing';
 import LoginForm from '../components/LoginForm';

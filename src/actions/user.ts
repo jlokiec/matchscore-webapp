@@ -1,4 +1,4 @@
-import { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { UserLoginDto } from '../models/UserLoginDto';
 import * as api from '../constants/api';
 import { CredentialsDto } from '../models/CredentialsDto';

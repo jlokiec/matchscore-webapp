@@ -1,7 +1,7 @@
 import React from 'react';
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import LeagueBrowser from '../components/LeagueBrowser';
-import { Link, RouteComponentProps } from "react-router-dom"
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { HOME_NAME } from './Home';
 import { CATEGORIES_NAME } from './Categories';
 import * as routing from '../constants/routing';
