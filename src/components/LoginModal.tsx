@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 import { login, clear } from '../actions/user';
 import { ThunkDispatch } from 'redux-thunk';
 
+const LOGIN_SUCCESS_CLOSE_TIMEOUT = 1500;
+
 interface CustomProps {
     show: boolean,
     handleCancel: Function
@@ -58,8 +60,8 @@ class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
     }
 
     handleClose() {
-        this.setState({ show: false, username: "", password: "" });
         this.props.clear();
+        this.setState({ show: false, username: "", password: "" });
         this.props.handleCancel();
     }
 
@@ -97,6 +99,7 @@ class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
         if (this.props.error) {
             return (<Alert variant="danger">Błąd podczas logowania.</Alert>);
         } else if (this.props.success) {
+            setTimeout(this.handleClose, LOGIN_SUCCESS_CLOSE_TIMEOUT);
             return (<Alert variant="success">Zostałeś poprawnie zalogowany!</Alert>);
         }
     }
