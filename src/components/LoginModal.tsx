@@ -9,7 +9,7 @@ import { CredentialsDto } from '../models/CredentialsDto';
 import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
 import { login, clear } from '../actions/user';
-import { ThunkDispatch } from 'redux-thunk'
+import { ThunkDispatch } from 'redux-thunk';
 
 interface CustomProps {
     show: boolean,
@@ -63,13 +63,17 @@ class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
         this.props.handleCancel();
     }
 
-    handleLogin() {
-        const credentials: CredentialsDto = {
-            username: this.state.username,
-            password: this.state.password
-        };
+    handleLogin(event: React.FormEvent) {
+        if (this.enableLogin()) {
+            event.preventDefault();
 
-        this.props.login(credentials);
+            const credentials: CredentialsDto = {
+                username: this.state.username,
+                password: this.state.password
+            };
+
+            this.props.login(credentials);
+        }
     }
 
     enableLogin() {
@@ -106,7 +110,7 @@ class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
                 <Modal.Body>
                     <div>
                         {this.loginFeedback()}
-                        <Form>
+                        <Form onSubmit={this.handleLogin}>
                             <Form.Group as={Row} controlId="username">
                                 <Form.Label column sm={3}>Login:</Form.Label>
                                 <Col sm={6}>
@@ -127,17 +131,16 @@ class LoginModal extends React.Component<LoginModalProps, LoginModalState>{
                                     />
                                 </Col>
                             </Form.Group>
+                            <div className="d-flex justify-content-center">
+                                <Button
+                                    variant="primary"
+                                    disabled={!this.enableLogin()}
+                                    type="submit"
+                                >Zaloguj się</Button>
+                            </div>
                         </Form>
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={this.handleClose}>Anuluj</Button>
-                    <Button
-                        variant="primary"
-                        onClick={this.handleLogin}
-                        disabled={!this.enableLogin()}
-                    >Zaloguj się</Button>
-                </Modal.Footer>
             </Modal>
         );
     }
