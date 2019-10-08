@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -9,6 +10,7 @@ import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
 import { login, clear } from '../actions/user';
 import { ThunkDispatch } from 'redux-thunk';
+import * as routing from '../constants/Routing';
 
 interface CustomProps {
 
@@ -80,7 +82,7 @@ class LoginForm extends React.Component<LoginFormProps, LoginFormState>{
         if (this.props.error) {
             return (<Alert variant="danger">Błąd podczas logowania.</Alert>);
         } else if (this.props.success) {
-            return (<Alert variant="success">Zostałeś poprawnie zalogowany!</Alert>);
+            return (<Redirect to={routing.HOME_ROUTE}></Redirect>);
         }
     }
 
