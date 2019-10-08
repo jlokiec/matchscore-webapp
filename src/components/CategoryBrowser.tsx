@@ -4,7 +4,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import { LeagueCategory } from '../models/LeagueCategory';
-import * as routing from '../constants/Routing';
+import * as routing from '../constants/routing';
 import { CombinedState } from '../reducers/rootReducer';
 import { ThunkDispatch } from 'redux-thunk'
 import { connect } from 'react-redux';

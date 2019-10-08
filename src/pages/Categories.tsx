@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import CategoryBrowser from '../components/CategoryBrowser';
 import { HOME_NAME } from './Home';
-import * as routing from '../constants/Routing';
+import * as routing from '../constants/routing';
 
 export const Categories: React.FC = () => {
     return (

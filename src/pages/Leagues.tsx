@@ -4,7 +4,7 @@ import LeagueBrowser from '../components/LeagueBrowser';
 import { Link, RouteComponentProps } from "react-router-dom"
 import { HOME_NAME } from './Home';
 import { CATEGORIES_NAME } from './Categories';
-import * as routing from '../constants/Routing';
+import * as routing from '../constants/routing';
 
 interface LeagueId {
     id: string

@@ -3,7 +3,7 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import RegisterForm from '../components/RegisterForm';
 import { Link } from "react-router-dom"
 import { HOME_NAME } from './Home';
-import * as routing from '../constants/Routing';
+import * as routing from '../constants/routing';
 
 export const Register: React.FC = () => {
     return (

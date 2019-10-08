@@ -9,7 +9,7 @@ import { Categories, CATEGORIES_NAME } from './pages/Categories';
 import { Leagues } from './pages/Leagues';
 import { Register, REGISTER_NAME } from './pages/Register';
 import { Login } from './pages/Login';
-import * as routing from './constants/Routing';
+import * as routing from './constants/routing';
 import { connect } from 'react-redux';
 import { CombinedState } from './reducers/rootReducer';
 import { ThunkDispatch } from 'redux-thunk';
