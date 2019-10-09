@@ -6,12 +6,12 @@ import { HOME_NAME } from './Home';
 import { CATEGORIES_NAME } from './Categories';
 import * as routing from '../constants/routing';
 
-interface LeagueId {
+interface LeagueCategoryId {
     id: string
 }
 
-interface LeagueProperties extends RouteComponentProps<LeagueId> {
-    categoryName: string
+interface LeagueProperties extends RouteComponentProps<LeagueCategoryId> {
+
 }
 
 export const Leagues: React.FC<LeagueProperties> = (props: LeagueProperties) => {
