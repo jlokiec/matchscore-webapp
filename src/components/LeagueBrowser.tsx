@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { fetch } from '../actions/leagues';
 import { getLeaguesForCategoryId } from '../reducers/leaguesReducer';
 import { ThunkDispatch } from 'redux-thunk';
+import * as routing from '../constants/routing';
+import { Link } from 'react-router-dom';
 
 interface CustomProps {
     categoryId: number
@@ -49,7 +51,7 @@ class LeagueBrowser extends React.Component<LeagueBrowserProperties, {}>{
         }
         return (
             <ListGroup variant="flush">
-                {this.props.leagues.map(league => <ListGroup.Item key={league.id}>{league.name}</ListGroup.Item>)}
+                {this.props.leagues.map(league => <ListGroup.Item key={league.id}><Link to={`${routing.LEAGUE_DETAILS_PATH}/${league.id}`}>{league.name}</Link></ListGroup.Item>)}
             </ListGroup>
         );
     }
