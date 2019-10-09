@@ -2,8 +2,11 @@ import React from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import Row from 'react-bootstrap/Row';
 import { HOME_NAME } from '../pages/Home';
 import { CATEGORIES_NAME } from '../pages/Categories';
 import { REGISTER_NAME } from '../pages/Register';
@@ -43,10 +46,18 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
         if (this.props.isLoggedIn) {
             return (
                 <div className="d-flex justify-content-right">
-                    <Nav.Item>
-                        <Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>
-                    </Nav.Item>
-                    <Button onClick={this.handleLogout}>Wyloguj się</Button>
+                    <Container>
+                        <Row className="justify-content-md-center">
+                            <Col sm="auto">
+                                <Nav.Item>
+                                    <Navbar.Text>{`Witaj, ${this.props.username}`}</Navbar.Text>
+                                </Nav.Item>
+                            </Col>
+                            <Col sm="auto">
+                                <Button onClick={this.handleLogout}>Wyloguj się</Button>
+                            </Col>
+                        </Row>
+                    </Container>
                 </div>
             );
         } else {
