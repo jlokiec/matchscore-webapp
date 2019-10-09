@@ -1,5 +1,5 @@
 import React from 'react';
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
 export const Home: React.FC = () => {
     return (

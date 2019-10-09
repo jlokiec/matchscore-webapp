@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { processRequest, processResponse } from './token';
-import { BASE_URL } from '../constants/Api';
+import { BASE_URL } from '../constants/api';
 
 export const myAxios = () => {
     const axiosInstance = axios.create({ baseURL: BASE_URL });

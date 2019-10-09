@@ -10,7 +10,7 @@ import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
 import { login, clear } from '../actions/user';
 import { ThunkDispatch } from 'redux-thunk';
-import * as routing from '../constants/Routing';
+import * as routing from '../constants/routing';
 
 interface CustomProps {
 

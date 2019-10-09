@@ -1,5 +1,5 @@
-import { ThunkAction, ThunkDispatch } from 'redux-thunk'
-import * as api from '../constants/Api';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import * as api from '../constants/api';
 import { League } from '../models/League';
 import { myAxios } from '../utils/axios';
 
