@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { HOME_NAME } from './Home';
 import { CATEGORIES_NAME } from './Categories';
 import * as routing from '../constants/routing';
+import LeagueDetailsBrowser from '../components/LeagueDetailsBrowser';
 
 interface LeagueId {
     id: string
@@ -22,7 +23,7 @@ export const LeagueDetails: React.FC<LeagueDetailsProperties> = (props: LeagueDe
                 <Breadcrumb.Item href={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Breadcrumb.Item>
                 <Breadcrumb.Item active>{LEAGUE_DETAILS_NAME}</Breadcrumb.Item>
             </Breadcrumb>
-            <p>Szczegóły ligi {id}</p>
+            <LeagueDetailsBrowser leagueId={id} />
         </div>
     );
 }
