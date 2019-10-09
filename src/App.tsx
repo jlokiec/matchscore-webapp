@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { HOME_NAME } from './pages/Home';
 import { CATEGORIES_NAME } from './pages/Categories';
 import { REGISTER_NAME } from './pages/Register';
@@ -55,7 +55,7 @@ class App extends React.Component<AppProps, {}> {
     } else {
       return (
         <div className="d-flex justify-content-right">
-          <Nav.Link as={Link} to={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
+          <Nav.Link href={routing.REGISTER_ROUTE}>{REGISTER_NAME}</Nav.Link>
           <Button href={routing.LOGIN_ROUTE}>Zaloguj się</Button>
         </div>
       );
@@ -67,12 +67,12 @@ class App extends React.Component<AppProps, {}> {
       <Container>
         <Router>
           <Navbar bg="light" expand="lg">
-            <Navbar.Brand as={Link} to="/">MatchScore</Navbar.Brand>
+            <Navbar.Brand href="/">MatchScore</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-                <Nav.Link as={Link} to={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
-                <Nav.Link as={Link} to={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
+                <Nav.Link href={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
+                <Nav.Link href={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
               </Nav>
               {this.displayLoginOrWelcome()}
             </Navbar.Collapse>
