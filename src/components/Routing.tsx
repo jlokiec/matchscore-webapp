@@ -7,6 +7,7 @@ import { Leagues } from '../pages/Leagues';
 import { Register } from '../pages/Register';
 import { Login } from '../pages/Login';
 import { LeagueDetails } from '../pages/LeagueDetails';
+import ConfirmEmail from '../pages/ConfirmEmail';
 
 export const AppRouting: React.FC = () => {
     return (
@@ -17,6 +18,7 @@ export const AppRouting: React.FC = () => {
             <Route path={routing.REGISTER_ROUTE} component={Register} />
             <Route path={routing.LOGIN_ROUTE} component={Login} />
             <Route path={routing.LEAGUE_DETAILS_ROUTE} component={LeagueDetails} />
+            <Route path={routing.CONFIRM_EMAIL_ROUTE} component={ConfirmEmail} />
             <Route component={() => <h1>Page not found</h1>} />
         </Switch>
     );
