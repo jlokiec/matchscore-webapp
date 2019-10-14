@@ -1,35 +1,40 @@
 import React from 'react';
-import { League } from '../models/League';
-import ListGroup from 'react-bootstrap/ListGroup';
+import Accordion from 'react-bootstrap/Accordion';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
-import { fetch } from '../actions/leagues';
-import { getLeaguesForCategoryId } from '../reducers/leaguesReducer';
+import { fetch } from '../actions/matches';
 import { ThunkDispatch } from 'redux-thunk';
-import * as routing from '../constants/routing';
-import { Link } from 'react-router-dom';
+import { Match } from '../models/Match';
+import { getMatchesForLeagueId } from '../reducers/matchReducer';
+import RoundCard from './RoundCard';
 
 interface CustomProps {
-    categoryId: number
+    leagueId: number
 }
 
 interface StateProps {
     loading: boolean,
     error?: object,
-    leagues: Array<League>
+    matches: Array<Match>
 }
 
 interface DispatchProps {
-    fetch: (categoryId: number) => void
+    fetch: (leagueId: number) => void
 }
 
-type LeagueBrowserProperties = StateProps & CustomProps & DispatchProps;
+type LeagueDetailsBrowserProperties = StateProps & CustomProps & DispatchProps;
 
-class LeagueBrowser extends React.Component<LeagueBrowserProperties, {}>{
+class LeagueDetailsBrowser extends React.Component<LeagueDetailsBrowserProperties, {}>{
     componentDidMount() {
-        this.props.fetch(this.props.categoryId);
+        this.props.fetch(this.props.leagueId);
+    }
+
+    getAllRounds(matches: Array<Match>): Array<number> {
+        let roundNumbers: Set<number> = new Set<number>();
+        matches.forEach(match => roundNumbers.add(match.round));
+        return Array.from(roundNumbers.values());
     }
 
     render() {
@@ -50,9 +55,12 @@ class LeagueBrowser extends React.Component<LeagueBrowserProperties, {}>{
             );
         }
         return (
-            <ListGroup variant="flush">
-                {this.props.leagues.map(league => <ListGroup.Item key={league.id}><Link to={`${routing.LEAGUE_DETAILS_PATH}/${league.id}`}>{league.name}</Link></ListGroup.Item>)}
-            </ListGroup>
+            <div>
+                <p className="d-flex justify-content-center">Mecze z podziałem na kolejki:</p>
+                <Accordion>
+                    {this.getAllRounds(this.props.matches).map(round => <RoundCard leagueId={this.props.leagueId} round={round} />)}
+                </Accordion>
+            </div>
         );
     }
 }
@@ -61,14 +69,14 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
     return {
         loading: states.leagues.loading,
         error: states.leagues.error,
-        leagues: getLeaguesForCategoryId(states.leagues, customProps.categoryId)
+        matches: getMatchesForLeagueId(states.matches, customProps.leagueId)
     };
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
     return {
-        fetch: (categoryId: number) => dispatch(fetch(categoryId))
+        fetch: (leagueId: number) => dispatch(fetch(leagueId))
     };
 }
 
-export default connect<StateProps, DispatchProps, CustomProps, CombinedState>(mapStateToProps, mapDispatchToProps)(LeagueBrowser);
+export default connect<StateProps, DispatchProps, CustomProps, CombinedState>(mapStateToProps, mapDispatchToProps)(LeagueDetailsBrowser);
