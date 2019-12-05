@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import { HOME_NAME } from '../pages/Home';
 import { CATEGORIES_NAME } from '../pages/Categories';
 import { REGISTER_NAME } from '../pages/Register';
+import { ADMIN_PANEL_NAME } from '../pages/AdminPanel';
 import * as routing from '../constants/routing';
 import { CombinedState } from '../reducers/rootReducer';
 import { logout } from '../actions/user';
@@ -36,6 +37,7 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
         super(props);
         this.handleLogout = this.handleLogout.bind(this);
         this.displayLoginOrWelcome = this.displayLoginOrWelcome.bind(this);
+        this.displayAdminPanel = this.displayAdminPanel.bind(this);
     }
 
     handleLogout(event: any) {
@@ -70,6 +72,12 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
         }
     }
 
+    displayAdminPanel() {
+        if (this.props.isAdmin) {
+            return <Nav.Link href={routing.ADMIN_PANEL_ROUTE}>{ADMIN_PANEL_NAME}</Nav.Link>
+        }
+    }
+
     render() {
         return (
             <Navbar bg="light" expand="lg">
@@ -79,6 +87,7 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
                     <Nav className="mr-auto">
                         <Nav.Link href={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
                         <Nav.Link href={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
+                        {this.displayAdminPanel()}
                     </Nav>
                     {this.displayLoginOrWelcome()}
                 </Navbar.Collapse>
