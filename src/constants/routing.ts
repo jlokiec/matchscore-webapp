@@ -8,3 +8,4 @@ export const LEAGUE_DETAILS_PATH = "/league_details";
 export const LEAGUE_DETAILS_ROUTE = LEAGUE_DETAILS_PATH + "/:id";
 export const CONFIRM_EMAIL_PATH = "/confirm";
 export const CONFIRM_EMAIL_ROUTE = CONFIRM_EMAIL_PATH + "/:uuid";
+export const ADMIN_PANEL_ROUTE = "/admin_panel";

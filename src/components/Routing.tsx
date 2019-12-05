@@ -8,6 +8,7 @@ import { Register } from '../pages/Register';
 import { Login } from '../pages/Login';
 import { LeagueDetails } from '../pages/LeagueDetails';
 import ConfirmEmail from '../pages/ConfirmEmail';
+import { AdminPanel } from '../pages/AdminPanel';
 
 export const AppRouting: React.FC = () => {
     return (
@@ -19,6 +20,7 @@ export const AppRouting: React.FC = () => {
             <Route path={routing.LOGIN_ROUTE} component={Login} />
             <Route path={routing.LEAGUE_DETAILS_ROUTE} component={LeagueDetails} />
             <Route path={routing.CONFIRM_EMAIL_ROUTE} component={ConfirmEmail} />
+            <Route path={routing.ADMIN_PANEL_ROUTE} component={AdminPanel} />
             <Route component={() => <h1>Page not found</h1>} />
         </Switch>
     );
