@@ -4,7 +4,7 @@ import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
-import { fetch } from '../actions/matches';
+import { fetchForLeague } from '../actions/matches';
 import { ThunkDispatch } from 'redux-thunk';
 import { Match } from '../models/Match';
 import { getMatchesForLeagueId } from '../reducers/matchReducer';
@@ -75,7 +75,7 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
     return {
-        fetch: (leagueId: number) => dispatch(fetch(leagueId))
+        fetch: (leagueId: number) => dispatch(fetchForLeague(leagueId))
     };
 }
 
