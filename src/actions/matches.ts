@@ -52,7 +52,6 @@ export const fetchForLeague = (leagueId?: number): ThunkAction<Promise<void>, {}
             }
         })
             .then(response => {
-                console.log(JSON.stringify(response, null, 2));
                 dispatch(fetchMatchesSuccess(response.data));
                 Promise.resolve();
             })
@@ -72,7 +71,6 @@ export const fetchForDate = (date: number): ThunkAction<Promise<void>, {}, {}, M
             }
         })
             .then(response => {
-                console.log(JSON.stringify(response, null, 2));
                 dispatch(fetchMatchesSuccess(response.data));
                 Promise.resolve();
             })
