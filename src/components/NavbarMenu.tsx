@@ -58,7 +58,7 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
                                 </Nav.Item>
                             </Col>
                             <Col sm="auto">
-                                <Button onClick={this.handleLogout}>Wyloguj się</Button>
+                                <Button onClick={this.handleLogout} href={routing.HOME_ROUTE}>Wyloguj się</Button>
                             </Col>
                         </Row>
                     </Container>
