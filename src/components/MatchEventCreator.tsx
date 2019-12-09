@@ -236,7 +236,7 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
                     <Container>
                         <Row>
                             <Col sm>
-                                <h1 style={{ textAlign: "center" }}>Gospodarze</h1>
+                                <h1 style={{ textAlign: "center" }}>{this.props.report.match.homeTeam.name}</h1>
                                 <Form onSubmit={this.createHomeEvent}>
                                     <Form.Group>
                                         <Form.Label>Wydarzenie</Form.Label>
@@ -258,7 +258,7 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
                                 </Form>
                             </Col>
                             <Col sm>
-                                <h1 style={{ textAlign: "center" }}>Goście</h1>
+                                <h1 style={{ textAlign: "center" }}>{this.props.report.match.awayTeam.name}</h1>
                                 <Form onSubmit={this.createAwayEvent}>
                                     <Form.Group>
                                         <Form.Label>Wydarzenie</Form.Label>
