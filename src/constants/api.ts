@@ -10,3 +10,4 @@ export const CONFIRM_EMAIL = REGISTER + "/confirm";
 export const REPORTS = SECURE_PREFIX + "reports";
 export const UNRATED_REPORTS = REPORTS + "/unrated";
 export const MATCH_EVENTS = SECURE_PREFIX + "events";
+export const PLAYERS = PUBLIC_PREFIX + "players";

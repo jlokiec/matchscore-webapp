@@ -12,20 +12,28 @@ import { ThunkDispatch } from 'redux-thunk';
 import { CreateMatchEventDto } from '../models/CreateMatchEventDto';
 import { MatchEvent, EventType, EventCategory } from '../models/MatchEvent';
 import { getEventsForReport } from '../reducers/matchEventsReducer';
+import { Player } from '../models/Player';
+import { getPlayersForTeamId } from '../reducers/playersReducer';
+import { fetchForTeamId } from '../actions/players';
 
 interface CustomProps {
-    reportId: number
+    reportId: number,
+    homeTeamId: number,
+    awayTeamId: number
 }
 
 interface StateProps {
     loading: boolean,
     error?: object,
     matchEvents: Array<MatchEvent>,
+    homePlayers: Array<Player>,
+    awayPlayers: Array<Player>
 }
 
 interface DispatchProps {
     postMatchEvent: (data: CreateMatchEventDto) => void,
-    fetchForReport: (reportId: number) => void
+    fetchForReport: (reportId: number) => void,
+    fetchForTeamId: (teamId: number) => void
 }
 
 interface MatchEventCreatorState {
@@ -64,6 +72,8 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
 
     componentDidMount() {
         this.props.fetchForReport(this.props.reportId);
+        this.props.fetchForTeamId(this.props.homeTeamId);
+        this.props.fetchForTeamId(this.props.awayTeamId);
     }
 
     createStartFirstHalfEvent() {
@@ -152,6 +162,28 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
         this.props.postMatchEvent(event);
     }
 
+    populateHomePlayersDropdown() {
+        if (this.props.homePlayers.length > 0) {
+            return (
+                <Form.Control as="select" onChange={(e: any) => { this.setState({ homeEventDescription: e.target.value }) }}>
+                    <option></option>
+                    {this.props.homePlayers.map(player => <option>{`${player.firstName} ${player.lastName}`}</option>)}
+                </Form.Control>
+            );
+        }
+    }
+
+    populateAwayPlayersDropdown() {
+        if (this.props.awayPlayers.length > 0) {
+            return (
+                <Form.Control as="select" onChange={(e: any) => { this.setState({ awayEventDescription: e.target.value }) }}>
+                    <option></option>
+                    {this.props.awayPlayers.map(player => <option>{`${player.firstName} ${player.lastName}`}</option>)}
+                </Form.Control>
+            );
+        }
+    }
+
     render() {
         return (
             <div>
@@ -181,7 +213,7 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
                 <Container>
                     <Row>
                         <Col sm>
-                            <h1 style={{textAlign:"center"}}>Gospodarze</h1>
+                            <h1 style={{ textAlign: "center" }}>Gospodarze</h1>
                             <Form onSubmit={this.createHomeEvent}>
                                 <Form.Group>
                                     <Form.Label>Wydarzenie</Form.Label>
@@ -197,19 +229,13 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label >Zawodnik</Form.Label>
-                                    <Form.Control as="select" onChange={(e: any) => { this.setState({ homeEventDescription: e.target.value }) }}>
-                                        <option>test1</option>
-                                        <option>test2</option>
-                                        <option>test3</option>
-                                        <option>test4</option>
-                                        <option>test5</option>
-                                    </Form.Control>
+                                    {this.populateHomePlayersDropdown()}
                                 </Form.Group>
                                 <Button variant="primary" type="submit">Wyślij</Button>
                             </Form>
                         </Col>
                         <Col sm>
-                        <h1 style={{textAlign:"center"}}>Goście</h1>
+                            <h1 style={{ textAlign: "center" }}>Goście</h1>
                             <Form onSubmit={this.createAwayEvent}>
                                 <Form.Group>
                                     <Form.Label>Wydarzenie</Form.Label>
@@ -225,13 +251,7 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label >Zawodnik</Form.Label>
-                                    <Form.Control as="select" onChange={(e: any) => { this.setState({ awayEventDescription: e.target.value }) }}>
-                                        <option>test1</option>
-                                        <option>test2</option>
-                                        <option>test3</option>
-                                        <option>test4</option>
-                                        <option>test5</option>
-                                    </Form.Control>
+                                    {this.populateAwayPlayersDropdown()}
                                 </Form.Group>
                                 <Button variant="primary" type="submit">Wyślij</Button>
                             </Form></Col>
@@ -246,14 +266,17 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
     return {
         loading: states.matchEvents.loading,
         error: states.matchEvents.error,
-        matchEvents: getEventsForReport(states.matchEvents, customProps.reportId)
+        matchEvents: getEventsForReport(states.matchEvents, customProps.reportId),
+        awayPlayers: getPlayersForTeamId(states.players, customProps.homeTeamId),
+        homePlayers: getPlayersForTeamId(states.players, customProps.awayTeamId)
     };
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
     return {
         postMatchEvent: (data: CreateMatchEventDto) => dispatch(postMatchEvent(data)),
-        fetchForReport: (reportId: number) => dispatch(fetchForReport(reportId))
+        fetchForReport: (reportId: number) => dispatch(fetchForReport(reportId)),
+        fetchForTeamId: (teamId: number) => dispatch(fetchForTeamId(teamId))
     };
 }
 
