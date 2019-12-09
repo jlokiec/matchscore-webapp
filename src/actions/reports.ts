@@ -12,6 +12,8 @@ export const FETCH_REPORT_SUCCESS = 'FETCH_REPORT_SUCCESS';
 export const FETCH_REPORT_ERROR = 'FETCH_REPORT_ERROR';
 export const POST_REPORT_SUCCESS = 'POST_REPORT_SUCCESS';
 export const POST_REPORT_ERROR = 'POST_REPORT_ERROR';
+export const UPDATE_SUCCESS = 'UPDATE_SUCCESS';
+export const UPDATE_ERROR = 'UPDATE_ERROR';
 
 export interface FetchReportsStartAction {
     type: string
@@ -51,7 +53,17 @@ export interface PostReportErrorAction {
     error: AxiosError
 }
 
-export type ReportsAction = FetchReportsStartAction | FetchReportsSuccessAction | FetchReportsErrorAction | FetchReportStartAction | FetchReportSuccessAction | FetchReportErrorAction | PostReportSuccessAction | PostReportErrorAction;
+export interface UpdateSuccessAction {
+    type: string,
+    report: Report
+}
+
+export interface UpdateErrorAction {
+    type: string,
+    error: AxiosError
+}
+
+export type ReportsAction = FetchReportsStartAction | FetchReportsSuccessAction | FetchReportsErrorAction | FetchReportStartAction | FetchReportSuccessAction | FetchReportErrorAction | PostReportSuccessAction | PostReportErrorAction | UpdateSuccessAction | UpdateErrorAction;
 
 export const fetchReportsStart = (): ReportsAction => {
     return {
@@ -107,6 +119,20 @@ export const postReportError = (error: AxiosError) => {
     };
 }
 
+export const updateSuccess = (report: Report) => {
+    return {
+        type: UPDATE_SUCCESS,
+        report: report
+    };
+}
+
+export const updateError = (error: AxiosError) => {
+    return {
+        type: UPDATE_ERROR,
+        error: error
+    };
+}
+
 export const fetchUnrated = (): ThunkAction<Promise<void>, {}, {}, ReportsAction> => {
     return async (dispatch: ThunkDispatch<{}, {}, ReportsAction>): Promise<void> => {
         dispatch(fetchReportsStart());
@@ -154,6 +180,42 @@ export const createForMatchId = (matchId: number): ThunkAction<Promise<void>, {}
             })
             .catch((error: AxiosError) => {
                 dispatch(postReportError(error));
+                Promise.reject();
+            })
+    };
+}
+
+export const updateStartTimestamp = (reportId: number, start: number): ThunkAction<Promise<void>, {}, {}, ReportsAction> => {
+    return async (dispatch: ThunkDispatch<{}, {}, ReportsAction>): Promise<void> => {
+        myAxios().put(`${api.REPORTS}/${reportId}`, null, {
+            params: {
+                start: start
+            }
+        })
+            .then(response => {
+                dispatch(updateSuccess(response.data));
+                Promise.resolve();
+            })
+            .catch((error: AxiosError) => {
+                dispatch(updateError(error));
+                Promise.reject();
+            })
+    };
+}
+
+export const updateEndTimestamp = (reportId: number, end: number): ThunkAction<Promise<void>, {}, {}, ReportsAction> => {
+    return async (dispatch: ThunkDispatch<{}, {}, ReportsAction>): Promise<void> => {
+        myAxios().put(`${api.REPORTS}/${reportId}`, null, {
+            params: {
+                end: end
+            }
+        })
+            .then(response => {
+                dispatch(updateSuccess(response.data));
+                Promise.resolve();
+            })
+            .catch((error: AxiosError) => {
+                dispatch(updateError(error));
                 Promise.reject();
             })
     };
