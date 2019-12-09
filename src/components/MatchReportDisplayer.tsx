@@ -35,11 +35,11 @@ class MatchReportDisplayer extends React.Component<MatchReportDisplayerPropertie
         const eventDescription = `${event.eventType} ${event.description}`;
         switch (event.category) {
             case EventCategory.GENERAL:
-                return <p style={{ textAlign: "center" }}>{eventDescription}</p>;
+                return <p key={event.id} style={{ textAlign: "center" }}>{eventDescription}</p>;
             case EventCategory.AWAY_TEAM:
-                return <p style={{ textAlign: "right" }}>{eventDescription}</p>;
+                return <p key={event.id} style={{ textAlign: "right" }}>{eventDescription}</p>;
             default:
-                return <p style={{ textAlign: "left" }}>{eventDescription}</p>
+                return <p key={event.id} style={{ textAlign: "left" }}>{eventDescription}</p>
         }
     }
 

@@ -44,12 +44,10 @@ class MatchReportCreator extends React.Component<MatchReportCreatorProperties, M
 
     showReportDetailsAndEventCreator() {
         if (this.props.report !== undefined) {
-            const homeTeamId = this.props.report.match.homeTeam.id;
-            const awayTeamId = this.props.report.match.awayTeam.id;
             return (
                 <div>
                     <MatchReportDisplayer reportId={this.props.report.id} />
-                    <MatchEventCreator reportId={this.props.report.id} homeTeamId={homeTeamId} awayTeamId={awayTeamId} />
+                    <MatchEventCreator report={this.props.report} />
                 </div>
             )
         }

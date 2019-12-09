@@ -13,7 +13,11 @@ import {
     FETCH_REPORT_SUCCESS,
     FETCH_REPORT_ERROR,
     FetchReportSuccessAction,
-    FetchReportErrorAction
+    FetchReportErrorAction,
+    UPDATE_SUCCESS,
+    UpdateSuccessAction,
+    UPDATE_ERROR,
+    UpdateErrorAction
 } from '../actions/reports';
 import { Report } from '../models/Report';
 import { AxiosError } from 'axios';
@@ -95,6 +99,17 @@ export const reports = (state: ReportsState = initialState, action: ReportsActio
                 error: (action as PostReportErrorAction).error,
                 shouldPostReport: false
             };
+        case UPDATE_SUCCESS:
+            return {
+                ...state,
+                error: undefined,
+                data: mergeUpdatedReport(state, (action as UpdateSuccessAction).report)
+            };
+        case UPDATE_ERROR:
+            return {
+                ...state,
+                error: (action as UpdateErrorAction).error
+            };
         default:
             return state;
     }
@@ -106,4 +121,14 @@ export const getUnrated = (state: ReportsState) => {
 
 export const getForMatchId = (state: ReportsState, matchId: number) => {
     return state.data.find(report => report.match.id === matchId);
+}
+
+const mergeUpdatedReport = (state: ReportsState, updatedReport: Report) => {
+    const index = state.data.findIndex(report => report.id === updatedReport.id);
+
+    if (index !== -1) {
+        state.data[index] = updatedReport;
+    }
+
+    return state.data;
 }
