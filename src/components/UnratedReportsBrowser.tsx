@@ -1,12 +1,13 @@
 import React from 'react';
-import { UnratedReport } from '../models/UnratedReport';
+import { Report } from '../models/Report';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
-import { fetch } from '../actions/unratedReports';
+import { fetchUnrated } from '../actions/reports';
 import { ThunkDispatch } from 'redux-thunk';
+import { getUnrated } from '../reducers/reportsReducer';
 
 interface CustomProps {
 
@@ -15,7 +16,7 @@ interface CustomProps {
 interface StateProps {
     loading: boolean,
     error?: object,
-    reports: Array<UnratedReport>
+    reports: Array<Report>
 }
 
 interface DispatchProps {
@@ -27,6 +28,16 @@ type UnratedReportsBrowserProperties = StateProps & CustomProps & DispatchProps;
 class UnratedReportsBrowser extends React.Component<UnratedReportsBrowserProperties, {}>{
     componentDidMount() {
         this.props.fetch();
+    }
+
+    processReport(report: Report) {
+        const homeTeam = report.match.homeTeam.name;
+        const awayTeam = report.match.awayTeam.name;
+        const matchDate = new Date(report.match.kickOffTimestamp * 1000);
+        const dateString = matchDate.toLocaleDateString();
+        const timeString = `${matchDate.getHours()}:${matchDate.getMinutes()}`;
+        const description = `${dateString} ${timeString} ${homeTeam} - ${awayTeam} (użytkownik ${report.username})`;
+        return <ListGroup.Item key={report.id}>{description}</ListGroup.Item>;
     }
 
     render() {
@@ -50,7 +61,7 @@ class UnratedReportsBrowser extends React.Component<UnratedReportsBrowserPropert
             <div>
                 <h1 className="d-flex justify-content-center">Raporty oczekujące na ocenę</h1>
                 <ListGroup variant="flush">
-                    {this.props.reports.map(report => <ListGroup.Item key={report.id}>{`${report.description} ocenione przez ${report.username}`}</ListGroup.Item>)}
+                    {this.props.reports.map(report => this.processReport(report))}
                 </ListGroup>
             </div>
         );
@@ -59,15 +70,15 @@ class UnratedReportsBrowser extends React.Component<UnratedReportsBrowserPropert
 
 const mapStateToProps = (states: CombinedState, customProps: CustomProps): StateProps => {
     return {
-        loading: states.unratedReports.loading,
-        error: states.unratedReports.error,
-        reports: states.unratedReports.data
+        loading: states.reports.loading,
+        error: states.reports.error,
+        reports: getUnrated(states.reports)
     };
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
     return {
-        fetch: () => dispatch(fetch())
+        fetch: () => dispatch(fetchUnrated())
     };
 }
 

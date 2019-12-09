@@ -9,7 +9,7 @@ import { Login } from '../pages/Login';
 import { LeagueDetails } from '../pages/LeagueDetails';
 import ConfirmEmail from '../pages/ConfirmEmail';
 import { AdminPanel } from '../pages/AdminPanel';
-import { AddReport } from '../pages/AddReport';
+import AddReport from '../pages/AddReport';
 
 export const AppRouting: React.FC = () => {
     return (
