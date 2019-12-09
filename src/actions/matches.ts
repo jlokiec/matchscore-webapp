@@ -43,7 +43,7 @@ export const fetchMatchesSuccess = (matches: Array<Match>): FetchMatchesSuccessA
     };
 }
 
-export const fetch = (leagueId: number): ThunkAction<Promise<void>, {}, {}, MatchesAction> => {
+export const fetchForLeague = (leagueId?: number): ThunkAction<Promise<void>, {}, {}, MatchesAction> => {
     return async (dispatch: ThunkDispatch<{}, {}, MatchesAction>): Promise<void> => {
         dispatch(fetchMatchesStart());
         myAxios().get(api.MATCHES, {
@@ -60,4 +60,23 @@ export const fetch = (leagueId: number): ThunkAction<Promise<void>, {}, {}, Matc
                 Promise.reject();
             });
     };
+}
+
+export const fetchForDate = (date: number): ThunkAction<Promise<void>, {}, {}, MatchesAction> => {
+    return async (dispatch: ThunkDispatch<{}, {}, MatchesAction>): Promise<void> => {
+        dispatch(fetchMatchesStart());
+        myAxios().get(api.MATCHES, {
+            params: {
+                date: date
+            }
+        })
+            .then(response => {
+                dispatch(fetchMatchesSuccess(response.data));
+                Promise.resolve();
+            })
+            .catch(error => {
+                dispatch(fetchMatchesError(error));
+                Promise.reject();
+            });
+    }
 }

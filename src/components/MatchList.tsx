@@ -1,17 +1,17 @@
 import React from 'react';
-import Accordion from 'react-bootstrap/Accordion';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
-import { fetchForLeague } from '../actions/matches';
+import { fetchForDate } from '../actions/matches';
 import { ThunkDispatch } from 'redux-thunk';
 import { Match } from '../models/Match';
-import { getMatchesForLeagueId } from '../reducers/matchReducer';
-import RoundCard from './RoundCard';
+import { getMatchesForDate } from '../reducers/matchReducer';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 interface CustomProps {
-    leagueId: number
+    setMatchId: Function,
+    timestamp: number
 }
 
 interface StateProps {
@@ -21,20 +21,37 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    fetch: (leagueId: number) => void
+    fetch: (date: number) => void
 }
 
-type LeagueDetailsBrowserProperties = StateProps & CustomProps & DispatchProps;
+interface MatchListState {
+    id?: number
+}
 
-class LeagueDetailsBrowser extends React.Component<LeagueDetailsBrowserProperties, {}>{
+type MatchListProperties = StateProps & CustomProps & DispatchProps;
+
+class MatchList extends React.Component<MatchListProperties, MatchListState> {
     componentDidMount() {
-        this.props.fetch(this.props.leagueId);
+        const timestampSeconds = Math.floor(this.props.timestamp / 1000);
+        this.props.fetch(timestampSeconds);
     }
 
-    getAllRounds(matches: Array<Match>): Array<number> {
-        let roundNumbers: Set<number> = new Set<number>();
-        matches.forEach(match => roundNumbers.add(match.round));
-        return Array.from(roundNumbers.values());
+    chooseMatch(id: number) {
+        this.props.setMatchId(id);
+    }
+
+    displayMatchList() {
+        if (this.props.matches.length > 0) {
+            return (
+                <ListGroup variant="flush">
+                    {this.props.matches.map(match => <ListGroup.Item key={match.id} action={true} onClick={this.chooseMatch.bind(this, match.id)}>{match.homeTeam.name + " - " + match.awayTeam.name}</ListGroup.Item>)}
+                </ListGroup>
+            );
+        } else {
+            return (
+                <h1 style={{ textAlign: "center" }}>Dzisiaj nie są rozgrywane żadne mecze.</h1>
+            );
+        }
     }
 
     render() {
@@ -56,10 +73,7 @@ class LeagueDetailsBrowser extends React.Component<LeagueDetailsBrowserPropertie
         }
         return (
             <div>
-                <p className="d-flex justify-content-center">Mecze z podziałem na kolejki:</p>
-                <Accordion>
-                    {this.getAllRounds(this.props.matches).map(round => <RoundCard leagueId={this.props.leagueId} round={round} />)}
-                </Accordion>
+                {this.displayMatchList()}
             </div>
         );
     }
@@ -69,14 +83,14 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
     return {
         loading: states.leagues.loading,
         error: states.leagues.error,
-        matches: getMatchesForLeagueId(states.matches, customProps.leagueId)
+        matches: getMatchesForDate(states.matches, new Date(customProps.timestamp))
     };
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: CustomProps): DispatchProps => {
     return {
-        fetch: (leagueId: number) => dispatch(fetchForLeague(leagueId))
+        fetch: (date: number) => dispatch(fetchForDate(date))
     };
 }
 
-export default connect<StateProps, DispatchProps, CustomProps, CombinedState>(mapStateToProps, mapDispatchToProps)(LeagueDetailsBrowser);
+export default connect<StateProps, DispatchProps, CustomProps, CombinedState>(mapStateToProps, mapDispatchToProps)(MatchList);

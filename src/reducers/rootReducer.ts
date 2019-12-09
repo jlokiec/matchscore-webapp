@@ -3,14 +3,16 @@ import { user, UserState } from './userReducer';
 import { leagues, LeaguesState } from './leaguesReducer';
 import { categories, CategoriesState } from './categoriesReducer';
 import { matches, MatchesState } from './matchReducer';
-import { unratedReports, UnratedReportsState } from './unratedReportsReducer';
+import { reports, ReportsState } from './reportsReducer';
+import { matchEvents, MatchEventsState } from './matchEventsReducer';
 
 export interface CombinedState {
     user: UserState,
     leagues: LeaguesState,
     categories: CategoriesState,
     matches: MatchesState,
-    unratedReports: UnratedReportsState
+    reports: ReportsState,
+    matchEvents: MatchEventsState
 }
 
-export const rootReducer = combineReducers<CombinedState>({ user, leagues, categories, matches, unratedReports });
+export const rootReducer = combineReducers<CombinedState>({ user, leagues, categories, matches, reports, matchEvents });

@@ -14,6 +14,7 @@ import { ADMIN_PANEL_NAME } from '../pages/AdminPanel';
 import * as routing from '../constants/routing';
 import { CombinedState } from '../reducers/rootReducer';
 import { logout } from '../actions/user';
+import { ADD_REPORT_NAME } from '../pages/AddReport';
 
 interface CustomProps {
 
@@ -38,6 +39,7 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
         this.handleLogout = this.handleLogout.bind(this);
         this.displayLoginOrWelcome = this.displayLoginOrWelcome.bind(this);
         this.displayAdminPanel = this.displayAdminPanel.bind(this);
+        this.displayAddReportLink = this.displayAddReportLink.bind(this);
     }
 
     handleLogout(event: any) {
@@ -56,7 +58,7 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
                                 </Nav.Item>
                             </Col>
                             <Col sm="auto">
-                                <Button onClick={this.handleLogout}>Wyloguj się</Button>
+                                <Button onClick={this.handleLogout} href={routing.HOME_ROUTE}>Wyloguj się</Button>
                             </Col>
                         </Row>
                     </Container>
@@ -73,8 +75,14 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
     }
 
     displayAdminPanel() {
-        if (this.props.isAdmin) {
+        if (this.props.isLoggedIn && this.props.isAdmin) {
             return <Nav.Link href={routing.ADMIN_PANEL_ROUTE}>{ADMIN_PANEL_NAME}</Nav.Link>
+        }
+    }
+
+    displayAddReportLink() {
+        if (this.props.isLoggedIn && this.props.isUser) {
+            return <Nav.Link href={routing.ADD_REPORT_ROUTE}>{ADD_REPORT_NAME}</Nav.Link>
         }
     }
 
@@ -87,6 +95,7 @@ class NavbarMenu extends React.Component<NavbarMenuProps, {}> {
                     <Nav className="mr-auto">
                         <Nav.Link href={routing.HOME_ROUTE}>{HOME_NAME}</Nav.Link>
                         <Nav.Link href={routing.CATEGORIES_ROUTE}>{CATEGORIES_NAME}</Nav.Link>
+                        {this.displayAddReportLink()}
                         {this.displayAdminPanel()}
                     </Nav>
                     {this.displayLoginOrWelcome()}

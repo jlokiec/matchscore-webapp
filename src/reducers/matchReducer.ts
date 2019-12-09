@@ -62,3 +62,22 @@ export const getMatchesForLeagueId = (state: MatchesState, leagueId: number) => 
 export const getMatchesForLeagueIdAndRound = (state: MatchesState, leagueId: number, round: number) => {
     return getMatchesForLeagueId(state, leagueId).filter(match => match.round === round);
 }
+
+export const getMatchesForDate = (state: MatchesState, date: Date) => {
+    let startDate = new Date(date);
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+    startDate.setSeconds(0);
+    startDate.setMilliseconds(0);
+
+    let endDate = new Date(date);
+    endDate.setHours(23);
+    endDate.setMinutes(59);
+    endDate.setSeconds(59);
+    endDate.setMilliseconds(999);
+
+    const startTimestamp = startDate.getTime() / 1000;
+    const endTimestamp = endDate.getTime() / 1000;
+
+    return state.data.filter(match => match.kickOffTimestamp >= startTimestamp && match.kickOffTimestamp <= endTimestamp);
+}
