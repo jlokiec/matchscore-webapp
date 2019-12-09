@@ -166,8 +166,8 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
         if (this.props.homePlayers.length > 0) {
             return (
                 <Form.Control as="select" onChange={(e: any) => { this.setState({ homeEventDescription: e.target.value }) }}>
-                    <option></option>
-                    {this.props.homePlayers.map(player => <option>{`${player.firstName} ${player.lastName}`}</option>)}
+                    <option key={0}></option>
+                    {this.props.homePlayers.map(player => <option key={player.id}>{`${player.firstName} ${player.lastName}`}</option>)}
                 </Form.Control>
             );
         }
@@ -177,8 +177,8 @@ class MatchEventCreator extends React.Component<MatchEventCreatorProperties, Mat
         if (this.props.awayPlayers.length > 0) {
             return (
                 <Form.Control as="select" onChange={(e: any) => { this.setState({ awayEventDescription: e.target.value }) }}>
-                    <option></option>
-                    {this.props.awayPlayers.map(player => <option>{`${player.firstName} ${player.lastName}`}</option>)}
+                    <option key={0}></option>
+                    {this.props.awayPlayers.map(player => <option key={player.id}>{`${player.firstName} ${player.lastName}`}</option>)}
                 </Form.Control>
             );
         }
