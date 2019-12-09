@@ -35,7 +35,7 @@ export const players = (state: PlayersState = initialState, action: PlayersActio
                 ...state,
                 loading: false,
                 error: undefined,
-                data: mergeMatchArrays(state.data, (action as FetchPlayersSuccessAction).players)
+                data: mergePlayerArrays(state.data, (action as FetchPlayersSuccessAction).players)
             };
         case FETCH_PLAYERS_ERROR:
             return {
@@ -48,7 +48,7 @@ export const players = (state: PlayersState = initialState, action: PlayersActio
     }
 }
 
-const mergeMatchArrays = (oldState: Array<Player>, fetchedPlayers: Array<Player>) => {
+const mergePlayerArrays = (oldState: Array<Player>, fetchedPlayers: Array<Player>) => {
     return [...oldState, ...fetchedPlayers].reduce((res: Array<Player>, data: Player, index: number, arr: Array<Player>) => {
         if (res.findIndex(player => player.id === data.id) < 0) {
             res.push(data);
