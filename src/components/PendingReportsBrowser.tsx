@@ -10,7 +10,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { getUnrated } from '../reducers/reportsReducer';
 
 interface CustomProps {
-
+    setReportId: Function
 }
 
 interface StateProps {
@@ -23,11 +23,15 @@ interface DispatchProps {
     fetch: () => void
 }
 
-type UnratedReportsBrowserProperties = StateProps & CustomProps & DispatchProps;
+type PendingReportsBrowserProperties = StateProps & CustomProps & DispatchProps;
 
-class UnratedReportsBrowser extends React.Component<UnratedReportsBrowserProperties, {}>{
+class PendingReportsBrowser extends React.Component<PendingReportsBrowserProperties, {}>{
     componentDidMount() {
         this.props.fetch();
+    }
+
+    chooseReport(id: number) {
+        this.props.setReportId(id);
     }
 
     processReport(report: Report) {
@@ -37,7 +41,7 @@ class UnratedReportsBrowser extends React.Component<UnratedReportsBrowserPropert
         const dateString = matchDate.toLocaleDateString();
         const timeString = `${matchDate.getHours()}:${matchDate.getMinutes()}`;
         const description = `${dateString} ${timeString} ${homeTeam} - ${awayTeam} (użytkownik ${report.username})`;
-        return <ListGroup.Item key={report.id}>{description}</ListGroup.Item>;
+        return <ListGroup.Item key={report.id} action={true} onClick={this.chooseReport.bind(this, report.id)}>{description}</ListGroup.Item>;
     }
 
     render() {
@@ -82,4 +86,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>, customProps: C
     };
 }
 
-export default connect<StateProps, DispatchProps, CustomProps, CombinedState>(mapStateToProps, mapDispatchToProps)(UnratedReportsBrowser);
+export default connect<StateProps, DispatchProps, CustomProps, CombinedState>(mapStateToProps, mapDispatchToProps)(PendingReportsBrowser);

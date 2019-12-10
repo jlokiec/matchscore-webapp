@@ -44,7 +44,10 @@ class MatchList extends React.Component<MatchListProperties, MatchListState> {
         if (this.props.matches.length > 0) {
             return (
                 <ListGroup variant="flush">
-                    {this.props.matches.map(match => <ListGroup.Item key={match.id} action={true} onClick={this.chooseMatch.bind(this, match.id)}>{match.homeTeam.name + " - " + match.awayTeam.name}</ListGroup.Item>)}
+                    {this.props.matches.map(match => {
+                        const startTime = new Date(match.kickOffTimestamp * 1000).getHours() + ":" + new Date(match.kickOffTimestamp * 1000).getMinutes();
+                        return <ListGroup.Item key={match.id} action={true} onClick={this.chooseMatch.bind(this, match.id)}>{`${startTime} ${match.homeTeam.name} - ${match.awayTeam.name}`}</ListGroup.Item>
+                    })}
                 </ListGroup>
             );
         } else {

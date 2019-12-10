@@ -17,10 +17,15 @@ import {
     UPDATE_SUCCESS,
     UpdateSuccessAction,
     UPDATE_ERROR,
-    UpdateErrorAction
+    UpdateErrorAction,
+    RATE_REPORT_SUCCESS,
+    RATE_REPORT_ERROR,
+    RateReportSuccessAction,
+    RateReportErrorAction
 } from '../actions/reports';
 import { Report } from '../models/Report';
 import { AxiosError } from 'axios';
+import { ReportRating } from '../models/ReportRating';
 
 export interface ReportsState {
     loading: boolean,
@@ -110,6 +115,19 @@ export const reports = (state: ReportsState = initialState, action: ReportsActio
                 ...state,
                 error: (action as UpdateErrorAction).error
             };
+        case RATE_REPORT_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: undefined,
+                data: mergeRatingWithReport(state, (action as RateReportSuccessAction).rating)
+            };
+        case RATE_REPORT_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: (action as RateReportErrorAction).error
+            };
         default:
             return state;
     }
@@ -128,6 +146,17 @@ const mergeUpdatedReport = (state: ReportsState, updatedReport: Report) => {
 
     if (index !== -1) {
         state.data[index] = updatedReport;
+    }
+
+    return state.data;
+}
+
+const mergeRatingWithReport = (state: ReportsState, reportRating: ReportRating) => {
+    const reportId = reportRating.reportId;
+    const index = state.data.findIndex(report => report.id === reportId);
+
+    if (index !== -1) {
+        state.data[index].rating = reportRating;
     }
 
     return state.data;
