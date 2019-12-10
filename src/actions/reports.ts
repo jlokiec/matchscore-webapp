@@ -3,6 +3,8 @@ import * as api from '../constants/api';
 import { Report } from '../models/Report';
 import { myAxios } from '../utils/axios';
 import { AxiosError } from 'axios';
+import { ReportRating } from '../models/ReportRating';
+import { RateReportDto } from '../models/RateReportDto';
 
 export const FETCH_REPORTS_START = 'FETCH_REPORTS_START';
 export const FETCH_REPORTS_SUCCESS = 'FETCH_REPORTS_SUCCESS';
@@ -14,6 +16,8 @@ export const POST_REPORT_SUCCESS = 'POST_REPORT_SUCCESS';
 export const POST_REPORT_ERROR = 'POST_REPORT_ERROR';
 export const UPDATE_SUCCESS = 'UPDATE_SUCCESS';
 export const UPDATE_ERROR = 'UPDATE_ERROR';
+export const RATE_REPORT_SUCCESS = 'RATE_REPORT_SUCCESS';
+export const RATE_REPORT_ERROR = 'RATE_REPORT_ERROR';
 
 export interface FetchReportsStartAction {
     type: string
@@ -63,7 +67,19 @@ export interface UpdateErrorAction {
     error: AxiosError
 }
 
-export type ReportsAction = FetchReportsStartAction | FetchReportsSuccessAction | FetchReportsErrorAction | FetchReportStartAction | FetchReportSuccessAction | FetchReportErrorAction | PostReportSuccessAction | PostReportErrorAction | UpdateSuccessAction | UpdateErrorAction;
+export interface RateReportSuccessAction {
+    type: string,
+    rating: ReportRating
+}
+
+export interface RateReportErrorAction {
+    type: string,
+    error: AxiosError
+}
+
+export type ReportsAction = FetchReportsStartAction | FetchReportsSuccessAction | FetchReportsErrorAction | FetchReportStartAction |
+    FetchReportSuccessAction | FetchReportErrorAction | PostReportSuccessAction | PostReportErrorAction | UpdateSuccessAction |
+    UpdateErrorAction | RateReportSuccessAction | RateReportErrorAction;
 
 export const fetchReportsStart = (): ReportsAction => {
     return {
@@ -129,6 +145,20 @@ export const updateSuccess = (report: Report) => {
 export const updateError = (error: AxiosError) => {
     return {
         type: UPDATE_ERROR,
+        error: error
+    };
+}
+
+export const rateReportSuccess = (rating: ReportRating) => {
+    return {
+        type: RATE_REPORT_SUCCESS,
+        rating: rating
+    };
+}
+
+export const rateReportError = (error: AxiosError) => {
+    return {
+        type: RATE_REPORT_ERROR,
         error: error
     };
 }
@@ -216,6 +246,20 @@ export const updateEndTimestamp = (reportId: number, end: number): ThunkAction<P
             })
             .catch((error: AxiosError) => {
                 dispatch(updateError(error));
+                Promise.reject();
+            })
+    };
+}
+
+export const rateReport = (ratingDto: RateReportDto): ThunkAction<Promise<void>, {}, {}, ReportsAction> => {
+    return async (dispatch: ThunkDispatch<{}, {}, ReportsAction>): Promise<void> => {
+        myAxios().post(api.RATINGS, ratingDto)
+            .then(response => {
+                dispatch(rateReportSuccess(response.data));
+                Promise.resolve();
+            })
+            .catch((error: AxiosError) => {
+                dispatch(rateReportError(error));
                 Promise.reject();
             })
     };
