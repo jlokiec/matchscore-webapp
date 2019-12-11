@@ -10,7 +10,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { getUnrated } from '../reducers/reportsReducer';
 
 interface CustomProps {
-    setReportId: Function
+    setReport: Function
 }
 
 interface StateProps {
@@ -30,8 +30,8 @@ class PendingReportsBrowser extends React.Component<PendingReportsBrowserPropert
         this.props.fetch();
     }
 
-    chooseReport(id: number) {
-        this.props.setReportId(id);
+    chooseReport(report: Report) {
+        this.props.setReport(report);
     }
 
     processReport(report: Report) {
@@ -41,7 +41,7 @@ class PendingReportsBrowser extends React.Component<PendingReportsBrowserPropert
         const dateString = matchDate.toLocaleDateString();
         const timeString = `${matchDate.getHours()}:${matchDate.getMinutes()}`;
         const description = `${dateString} ${timeString} ${homeTeam} - ${awayTeam} (użytkownik ${report.username})`;
-        return <ListGroup.Item key={report.id} action={true} onClick={this.chooseReport.bind(this, report.id)}>{description}</ListGroup.Item>;
+        return <ListGroup.Item key={report.id} action={true} onClick={this.chooseReport.bind(this, report)}>{description}</ListGroup.Item>;
     }
 
     render() {

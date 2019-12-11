@@ -178,7 +178,7 @@ export const fetchUnrated = (): ThunkAction<Promise<void>, {}, {}, ReportsAction
     };
 }
 
-export const fetchForMatchId = (matchId: number) => {
+export const fetchForMatchId = (matchId: number): ThunkAction<Promise<void>, {}, {}, ReportsAction> => {
     return async (dispatch: ThunkDispatch<{}, {}, ReportsAction>): Promise<void> => {
         dispatch(fetchReportStart());
         myAxios().get(api.REPORTS, {
