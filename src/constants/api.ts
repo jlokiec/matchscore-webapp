@@ -12,3 +12,4 @@ export const UNRATED_REPORTS = REPORTS + "/unrated";
 export const MATCH_EVENTS = SECURE_PREFIX + "events";
 export const PLAYERS = PUBLIC_PREFIX + "players";
 export const RATINGS = SECURE_PREFIX + "ratings";
+export const LIVE_REPORTS = PUBLIC_PREFIX + "reports/live";

@@ -42,11 +42,11 @@ class MatchReportCreator extends React.Component<MatchReportCreatorProperties, M
         }
     }
 
-    showReportDetailsAndEventCreator() {
-        if (this.props.report !== undefined) {
+    showReportAndCreator() {
+        if (this.props.report) {
             return (
                 <div>
-                    <MatchReportDisplayer reportId={this.props.report.id} />
+                    <MatchReportDisplayer report={this.props.report} />
                     <MatchEventCreator report={this.props.report} />
                 </div>
             )
@@ -57,7 +57,7 @@ class MatchReportCreator extends React.Component<MatchReportCreatorProperties, M
         this.createReport();
         return (
             <div>
-                {this.showReportDetailsAndEventCreator()}
+                {this.showReportAndCreator()}
             </div>
         );
     }

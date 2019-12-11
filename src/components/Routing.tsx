@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router';
 import * as routing from '../constants/routing';
-import { Home } from '../pages/Home';
+import Home from '../pages/Home';
 import { Categories } from '../pages/Categories';
 import { Leagues } from '../pages/Leagues';
 import { Register } from '../pages/Register';

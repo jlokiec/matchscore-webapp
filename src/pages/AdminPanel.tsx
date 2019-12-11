@@ -5,37 +5,38 @@ import * as routing from '../constants/routing';
 import PendingReportsBrowser from '../components/PendingReportsBrowser';
 import ReportRateCreator from '../components/ReportRatingCreator';
 import MatchReportDisplayer from '../components/MatchReportDisplayer';
+import { Report } from '../models/Report';
 
 interface AdminPanelState {
-    reportId?: number
+    report?: Report
 }
 
 export default class AdminPanel extends React.Component<{}, AdminPanelState>{
     constructor(props: {}) {
         super(props);
         this.state = {};
-        this.setReportId = this.setReportId.bind(this);
+        this.setReport = this.setReport.bind(this);
     }
 
-    setReportId(reportId: number) {
-        this.setState({ reportId: reportId });
+    setReport(report: Report) {
+        this.setState({ report: report });
     }
 
     showMatchList() {
-        if (this.state.reportId === undefined) {
-            return <PendingReportsBrowser setReportId={this.setReportId} />;
+        if (this.state.report === undefined) {
+            return <PendingReportsBrowser setReport={this.setReport} />;
         }
     }
 
     showReportDisplayer() {
-        if (this.state.reportId !== undefined) {
-            return <MatchReportDisplayer reportId={this.state.reportId} />;
+        if (this.state.report !== undefined) {
+            return <MatchReportDisplayer report={this.state.report} />;
         }
     }
 
     showReportRatingCreator() {
-        if (this.state.reportId !== undefined) {
-            return <ReportRateCreator reportId={this.state.reportId} />;
+        if (this.state.report !== undefined) {
+            return <ReportRateCreator reportId={this.state.report.id} />;
         }
     }
 

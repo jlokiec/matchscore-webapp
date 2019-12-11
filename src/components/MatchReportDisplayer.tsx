@@ -3,11 +3,12 @@ import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
 import { fetchForReport } from '../actions/matchEvents';
 import { ThunkDispatch } from 'redux-thunk';
-import { MatchEvent, EventType, EventCategory } from '../models/MatchEvent';
+import { MatchEvent, EventCategory } from '../models/MatchEvent';
 import { getEventsForReport } from '../reducers/matchEventsReducer';
+import { Report } from '../models/Report';
 
 interface CustomProps {
-    reportId: number
+    report: Report
 }
 
 interface StateProps {
@@ -28,11 +29,17 @@ type MatchReportDisplayerProperties = StateProps & CustomProps & DispatchProps;
 
 class MatchReportDisplayer extends React.Component<MatchReportDisplayerProperties, MatchReportDisplayerState> {
     componentDidMount() {
-        this.props.fetchForReport(this.props.reportId);
+        this.props.fetchForReport(this.props.report.id);
     }
 
     processEvent(event: MatchEvent) {
-        const eventDescription = `${event.eventType} ${event.description}`;
+        let eventTimeInMinutes;
+
+        if (this.props.report.startTimestamp) {
+            eventTimeInMinutes = Math.ceil((event.timestamp - this.props.report.startTimestamp) / 60);
+        }
+
+        const eventDescription = `${eventTimeInMinutes}' ${event.eventType} ${event.description}`;
         switch (event.category) {
             case EventCategory.GENERAL:
                 return <p key={event.id} style={{ textAlign: "center" }}>{eventDescription}</p>;
@@ -46,6 +53,7 @@ class MatchReportDisplayer extends React.Component<MatchReportDisplayerPropertie
     render() {
         return (
             <div>
+                {<h1 style={{ textAlign: "center" }}>{`${this.props.report.match.homeTeam.name} - ${this.props.report.match.awayTeam.name}`}</h1>}
                 {this.props.matchEvents.map(e => this.processEvent(e))}
             </div>
         );
@@ -56,7 +64,7 @@ const mapStateToProps = (states: CombinedState, customProps: CustomProps): State
     return {
         loading: states.matchEvents.loading,
         error: states.matchEvents.error,
-        matchEvents: getEventsForReport(states.matchEvents, customProps.reportId)
+        matchEvents: getEventsForReport(states.matchEvents, customProps.report.id)
     };
 }
 
