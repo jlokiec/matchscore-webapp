@@ -3,10 +3,10 @@ import { CombinedState } from '../reducers/rootReducer';
 import { connect } from 'react-redux';
 import { fetchForReport } from '../actions/matchEvents';
 import { ThunkDispatch } from 'redux-thunk';
-import { MatchEvent, EventCategory } from '../models/MatchEvent';
+import { MatchEvent } from '../models/MatchEvent';
 import { getEventsForReport } from '../reducers/matchEventsReducer';
 import { Report } from '../models/Report';
-import { processEvent, EventDetails } from '../utils/matchEvents';
+import { processEvent } from '../utils/matchEvents';
 
 interface CustomProps {
     report: Report
