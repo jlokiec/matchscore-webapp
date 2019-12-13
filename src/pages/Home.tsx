@@ -17,10 +17,15 @@ export default class Home extends React.Component<{}, HomeState>{
             showReport: false
         };
         this.setMatchId = this.setMatchId.bind(this);
+        this.goBackToList = this.goBackToList.bind(this);
     }
 
     setMatchId(matchId: number) {
         this.setState({ matchId: matchId, showList: false, showReport: true });
+    }
+
+    goBackToList() {
+        this.setState({ matchId: undefined, showList: true, showReport: false });
     }
 
     showMatchList() {
@@ -36,17 +41,13 @@ export default class Home extends React.Component<{}, HomeState>{
 
     showMatchReport() {
         if (this.state.matchId && this.state.showReport) {
-            return <LiveReportDisplayer matchId={this.state.matchId} />
+            return <LiveReportDisplayer matchId={this.state.matchId} goBack={this.goBackToList} />
         }
     }
 
     render() {
         return (
             <div>
-                <Breadcrumb>
-                    <Breadcrumb.Item active>{HOME_NAME}</Breadcrumb.Item>
-                </Breadcrumb>
-                <h1>Strona główna</h1>
                 {this.showMatchList()}
                 {this.showMatchReport()}
             </div>
