@@ -4,23 +4,30 @@ import MatchReportDisplayer from './MatchReportDisplayer';
 import { myAxios } from '../utils/axios';
 import { AxiosError } from 'axios';
 import * as api from '../constants/api';
+import Button from 'react-bootstrap/Button';
 
 interface LiveReportDisplayerProps {
-    matchId: number
+    matchId: number,
+    goBack: Function
 }
 
 interface LiveReportDisplayerState {
     report?: Report,
-    error?: AxiosError
+    error?: AxiosError,
+    timerId?: number
 }
+
+const UPDATE_INTERVAL = 30 * 1000;
 
 export default class LiveReportDisplayer extends React.Component<LiveReportDisplayerProps, LiveReportDisplayerState> {
     constructor(props: LiveReportDisplayerProps) {
         super(props);
         this.state = {};
+        this.fetchLiveReport = this.fetchLiveReport.bind(this);
+        this.goBackToList = this.goBackToList.bind(this);
     }
 
-    componentDidMount() {
+    fetchLiveReport() {
         myAxios().get(api.LIVE_REPORTS, {
             params: {
                 matchId: this.props.matchId
@@ -30,13 +37,32 @@ export default class LiveReportDisplayer extends React.Component<LiveReportDispl
             .catch((error: AxiosError) => this.setState({ error: error }))
     }
 
+    componentDidMount() {
+        this.fetchLiveReport();
+        let timerId = +setInterval(this.fetchLiveReport, UPDATE_INTERVAL);
+        this.setState({ timerId: timerId });
+    }
+
+    componentWillUnmount() {
+        if (this.state.timerId) {
+            clearInterval(this.state.timerId);
+        }
+    }
+
+    goBackToList() {
+        this.props.goBack();
+    }
+
     render() {
         if (this.state.report) {
-            return (<MatchReportDisplayer report={this.state.report} />);
-        } else if (this.state.error && this.state.error.message === 'Request failed with status code 404') {
-            return <h1>Z tego meczu nie jest prowadzona relacja</h1>
+            return (
+                <div>
+                    <Button onClick={this.goBackToList} variant="primary">Wróć</Button>
+                    <MatchReportDisplayer report={this.state.report} />
+                </div>
+            );
         } else {
-            return <h1>Wystąpił błąd</h1>
+            return <h1>Z tego meczu nie jest prowadzona relacja</h1>
         }
     }
 }

@@ -6,6 +6,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { MatchEvent, EventCategory } from '../models/MatchEvent';
 import { getEventsForReport } from '../reducers/matchEventsReducer';
 import { Report } from '../models/Report';
+import { processEvent, EventDetails } from '../utils/matchEvents';
 
 interface CustomProps {
     report: Report
@@ -32,22 +33,15 @@ class MatchReportDisplayer extends React.Component<MatchReportDisplayerPropertie
         this.props.fetchForReport(this.props.report.id);
     }
 
+    componentDidUpdate(prevProps: MatchReportDisplayerProperties) {
+        if (this.props.report !== prevProps.report) {
+            this.props.fetchForReport(this.props.report.id);
+        }
+    }
+
     processEvent(event: MatchEvent) {
-        let eventTimeInMinutes;
-
-        if (this.props.report.startTimestamp) {
-            eventTimeInMinutes = Math.ceil((event.timestamp - this.props.report.startTimestamp) / 60);
-        }
-
-        const eventDescription = `${eventTimeInMinutes}' ${event.eventType} ${event.description}`;
-        switch (event.category) {
-            case EventCategory.GENERAL:
-                return <p key={event.id} style={{ textAlign: "center" }}>{eventDescription}</p>;
-            case EventCategory.AWAY_TEAM:
-                return <p key={event.id} style={{ textAlign: "right" }}>{eventDescription}</p>;
-            default:
-                return <p key={event.id} style={{ textAlign: "left" }}>{eventDescription}</p>
-        }
+        const eventDetails = processEvent(event, this.props.matchEvents);
+        return <p key={event.id} style={{ textAlign: eventDetails.position }}>{eventDetails.description}</p>;
     }
 
     render() {
